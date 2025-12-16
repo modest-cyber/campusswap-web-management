@@ -1,0 +1,68 @@
+package com.modestcyber.mapper;
+
+import com.modestcyber.pojo.User;
+import org.apache.ibatis.annotations.*;
+
+/**
+ * 用户Mapper
+ */
+@Mapper
+public interface UserMapper {
+
+    /**
+     * 根据用户名查询用户
+     */
+    @Select("SELECT * FROM user WHERE username = #{username}")
+    User findByUsername(String username);
+
+    /**
+     * 根据邮箱查询用户
+     */
+    @Select("SELECT * FROM user WHERE email = #{email}")
+    User findByEmail(String email);
+
+    /**
+     * 根据手机号查询用户
+     */
+    @Select("SELECT * FROM user WHERE phone = #{phone}")
+    User findByPhone(String phone);
+
+    /**
+     * 根据ID查询用户
+     */
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    User findById(Long id);
+
+    /**
+     * 插入用户
+     */
+    @Insert("INSERT INTO user (username, password, real_name, email, phone, student_id, department, role, status, create_time, update_time) " +
+            "VALUES (#{username}, #{password}, #{realName}, #{email}, #{phone}, #{studentId}, #{department}, #{role}, #{status}, #{createTime}, #{updateTime})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    int insert(User user);
+
+    /**
+     * 更新用户信息
+     */
+    @Update("UPDATE user SET real_name = #{realName}, email = #{email}, phone = #{phone}, " +
+            "department = #{department}, update_time = #{updateTime} WHERE id = #{id}")
+    int updateInfo(User user);
+
+    /**
+     * 更新密码
+     */
+    @Update("UPDATE user SET password = #{password}, update_time = #{updateTime} WHERE id = #{id}")
+    int updatePassword(@Param("id") Long id, @Param("password") String password, @Param("updateTime") java.time.LocalDateTime updateTime);
+
+    /**
+     * 更新头像
+     */
+    @Update("UPDATE user SET avatar = #{avatar}, update_time = #{updateTime} WHERE id = #{id}")
+    int updateAvatar(@Param("id") Long id, @Param("avatar") String avatar, @Param("updateTime") java.time.LocalDateTime updateTime);
+
+    /**
+     * 删除用户
+     */
+    @Delete("DELETE FROM user WHERE id = #{id}")
+    int deleteById(Long id);
+}
