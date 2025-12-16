@@ -1,0 +1,57 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.9.3
+2 info using node@v22.20.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\Asus\java_projects\Test\campusswap-web-management\.npmrc
+5 silly config load:file:C:\Users\Asus\.npmrc
+6 silly config load:file:D:\nodejs\node_global\etc\npmrc
+7 verbose title npm create vite@latest frontend --template vue-ts
+8 verbose argv "create" "vite@latest" "frontend" "--" "--template" "vue-ts"
+9 verbose logfile logs-max:10 dir:C:\Users\Asus\java_projects\Test\campusswap-web-management\.npm-cache\_logs\2025-12-16T02_29_17_169Z-
+10 verbose logfile C:\Users\Asus\java_projects\Test\campusswap-web-management\.npm-cache\_logs\2025-12-16T02_29_17_169Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 http fetch GET 200 https://registry.npmjs.org/create-vite 750ms (cache miss)
+14 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+15 warn exec The following package was not found and will be installed: create-vite@8.2.0
+16 silly idealTree buildDeps
+17 silly fetch manifest create-vite@8.2.0
+18 silly packumentCache full:https://registry.npmjs.org/create-vite cache-miss
+19 http fetch GET 200 https://registry.npmjs.org/create-vite 229ms (cache miss)
+20 silly packumentCache full:https://registry.npmjs.org/create-vite set size:undefined disposed:false
+21 silly placeDep ROOT create-vite@8.2.0 OK for:  want: 8.2.0
+22 silly reify moves {}
+23 silly audit bulk request { 'create-vite': [ '8.2.0' ] }
+24 http cache create-vite@https://registry.npmjs.org/create-vite/-/create-vite-8.2.0.tgz 1ms (cache hit)
+25 silly tarball no local data for create-vite@https://registry.npmjs.org/create-vite/-/create-vite-8.2.0.tgz. Extracting by manifest.
+26 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 231ms
+27 silly audit report {}
+28 http fetch GET 200 https://registry.npmjs.org/npm 1826ms
+29 http fetch GET 200 https://registry.npmjs.org/create-vite/-/create-vite-8.2.0.tgz 1034ms (cache miss)
+30 verbose stack Error: command failed
+30 verbose stack     at promiseSpawn (C:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\promise-spawn\lib\index.js:22:22)
+30 verbose stack     at spawnWithShell (C:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\promise-spawn\lib\index.js:124:10)
+30 verbose stack     at promiseSpawn (C:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\promise-spawn\lib\index.js:12:12)
+30 verbose stack     at runScriptPkg (C:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\run-script\lib\run-script-pkg.js:79:13)
+30 verbose stack     at runScript (C:\Program Files\nodejs\node_modules\npm\node_modules\@npmcli\run-script\lib\run-script.js:9:12)
+30 verbose stack     at run (C:\Program Files\nodejs\node_modules\npm\node_modules\libnpmexec\lib\run-script.js:48:10)
+30 verbose stack     at async exec (C:\Program Files\nodejs\node_modules\npm\node_modules\libnpmexec\lib\index.js:298:10)
+30 verbose stack     at async Init.execCreate (C:\Program Files\nodejs\node_modules\npm\lib\commands\init.js:135:5)
+30 verbose stack     at async Init.exec (C:\Program Files\nodejs\node_modules\npm\lib\commands\init.js:44:14)
+30 verbose stack     at async Npm.exec (C:\Program Files\nodejs\node_modules\npm\lib\npm.js:207:9)
+31 error code 1
+32 error path C:\Users\Asus\java_projects\Test\campusswap-web-management
+33 error command failed
+34 error command C:\WINDOWS\system32\cmd.exe /d /s /c create-vite frontend --template vue-ts
+35 verbose cwd C:\Users\Asus\java_projects\Test\campusswap-web-management
+36 verbose os Windows_NT 10.0.26100
+37 verbose node v22.20.0
+38 verbose npm  v10.9.3
+39 notice
+39 notice New major version of npm available! 10.9.3 -> 11.7.0
+39 notice Changelog: https://github.com/npm/cli/releases/tag/v11.7.0
+39 notice To update run: npm install -g npm@11.7.0
+39 notice  { force: true, [Symbol(proc-log.meta)]: true }
+40 verbose exit 1
+41 verbose code 1
+42 error A complete log of this run can be found in: C:\Users\Asus\java_projects\Test\campusswap-web-management\.npm-cache\_logs\2025-12-16T02_29_17_169Z-debug-0.log
