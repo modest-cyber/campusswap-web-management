@@ -59,6 +59,12 @@ const routes: RouteRecordRaw[] = [
         name: 'myFavorites',
         component: () => import('../views/product/FavoriteList.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'orders',
+        name: 'myOrders',
+        component: () => import('../views/order/OrderList.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },
@@ -72,6 +78,24 @@ const routes: RouteRecordRaw[] = [
     path: '/product/edit/:id',
     name: 'productEdit',
     component: () => import('../views/product/ProductPublish.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/order/confirm',
+    name: 'orderConfirm',
+    component: () => import('../views/order/OrderConfirm.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/order/:id',
+    name: 'orderDetail',
+    component: () => import('../views/order/OrderDetail.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/order/:id/review',
+    name: 'orderReview',
+    component: () => import('../views/order/OrderReview.vue'),
     meta: { requiresAuth: true }
   },
   {

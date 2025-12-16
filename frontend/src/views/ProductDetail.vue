@@ -266,8 +266,8 @@ const handleOrder = () => {
   
   // 跳转到订单确认页
   router.push({
-    name: 'orderConfirm',
-    params: { productId: product.value.id }
+    path: '/order/confirm',
+    query: { productId: product.value.id }
   })
 }
 
