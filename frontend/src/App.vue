@@ -29,9 +29,24 @@
         </div>
         
         <div class="header-right">
-          <router-link to="/mine" class="user-btn">
+          <el-button 
+            v-if="authStore.token" 
+            type="success" 
+            @click="goToPublish"
+            class="publish-btn"
+          >
+            <el-icon><Plus /></el-icon>
+            发布商品
+          </el-button>
+          
+          <router-link v-if="authStore.token" to="/mine" class="user-btn">
             <el-icon><User /></el-icon>
             我的
+          </router-link>
+          
+          <router-link v-else to="/login" class="user-btn">
+            <el-icon><User /></el-icon>
+            登录
           </router-link>
         </div>
       </div>
@@ -56,9 +71,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Search, User } from '@element-plus/icons-vue'
+import { Search, User, Plus } from '@element-plus/icons-vue'
+import { useAuthStore } from './store/auth'
 
 const router = useRouter()
+const authStore = useAuthStore()
 const searchKeyword = ref('')
 
 const handleSearch = () => {
@@ -68,6 +85,10 @@ const handleSearch = () => {
       query: { keyword: searchKeyword.value.trim() }
     })
   }
+}
+
+const goToPublish = () => {
+  router.push('/product/publish')
 }
 </script>
 
@@ -140,6 +161,11 @@ const handleSearch = () => {
 .header-right {
   display: flex;
   align-items: center;
+  gap: 12px;
+}
+
+.publish-btn {
+  /* Element Plus button styles */
 }
 
 .user-btn {

@@ -7,6 +7,7 @@ export interface UserInfo {
   id?: number
   username?: string
   nickname?: string
+  realName?: string
   email?: string
   phone?: string
   department?: string
