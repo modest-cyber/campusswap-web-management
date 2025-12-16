@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <!-- 顶部导航 -->
-    <header class="header">
+    <header class="header" v-if="!isAdminRoute">
       <div class="container">
         <div class="header-left">
-          <router-link to="/" class="logo">校园二手交易平台</router-link>
+          <router-link to="/" class="logo">西安石油大学二手交易平台</router-link>
           <nav class="nav">
             <router-link to="/" class="nav-item">首页</router-link>
             <router-link to="/products" class="nav-item">商品分类</router-link>
@@ -54,29 +54,33 @@
     
     <!-- 主内容区 -->
     <main class="main">
-      <div class="container">
+      <div v-if="!isAdminRoute" class="container">
         <router-view />
       </div>
+      <router-view v-else />
     </main>
     
     <!-- 底部 -->
-    <footer class="footer">
+    <footer class="footer" v-if="!isAdminRoute">
       <div class="container">
-        <p>&copy; 2024 校园二手交易平台</p>
+        <p>&copy; 2024 西安石油大学二手交易平台</p>
       </div>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { Search, User, Plus } from '@element-plus/icons-vue'
 import { useAuthStore } from './store/auth'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 const searchKeyword = ref('')
+
+const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 
 const handleSearch = () => {
   if (searchKeyword.value.trim()) {

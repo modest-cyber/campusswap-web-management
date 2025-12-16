@@ -113,6 +113,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Product } from '../../api/product'
+import { getProductDetail } from '../../api/product'
 
 const route = useRoute()
 const router = useRouter()
@@ -187,24 +188,8 @@ const handleTransactionTypeChange = (value: number) => {
 // 加载商品信息
 const loadProduct = async () => {
   try {
-    // 实际开发中调用 API
-    // const data = await getProductDetail(productId.value)
-    // product.value = data
-    
-    // 模拟数据
-    product.value = {
-      id: 1,
-      title: 'iPhone 13 Pro',
-      description: '全新未拆封 iPhone 13 Pro，256GB 远峰蓝色。',
-      price: 5999,
-      originalPrice: 7999,
-      images: ['https://via.placeholder.com/100x100?text=iPhone13Pro'],
-      condition: '99成新',
-      transactionType: 3, // 均可
-      categoryName: '数码产品',
-      sellerName: '张三',
-      createdAt: '2024-01-15'
-    }
+    const data = await getProductDetail(productId.value)
+    product.value = data
     
     form.productId = product.value.id
     

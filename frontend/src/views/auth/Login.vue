@@ -12,14 +12,14 @@ const loading = ref(false)
 
 const form = reactive({
   account: '',
-  password: ''
+  password: '',
+  role: 'student' // 默认选择学生
 })
 
 const rules = {
   account: [{ required: true, message: '请输入用户名/邮箱/手机号', trigger: 'blur' }],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 8, message: '密码长度至少8位', trigger: 'blur' }
+    { required: true, message: '请输入密码', trigger: 'blur' }
   ]
 }
 
@@ -31,11 +31,39 @@ const onSubmit = () => {
     loading.value = true
     try {
       const res = await login({ account: form.account, password: form.password }) as unknown as LoginResult
+      
+      // 验证用户角色是否匹配
+      if (form.role === 'admin' && res.userInfo.role !== 'admin') {
+        ElMessage.error('当前账号不是管理员账号')
+        loading.value = false
+        return
+      }
+      if (form.role === 'student' && res.userInfo.role === 'admin') {
+        ElMessage.error('管理员请选择“管理员”身份登录')
+        loading.value = false
+        return
+      }
+      
       authStore.setToken(res.token)
-      authStore.setUser(res.user)
+      authStore.setUser(res.userInfo)
+      
+      console.log('登录成功后的用户信息:', res.userInfo)
+      console.log('authStore.role:', authStore.role)
+      
       ElMessage.success('登录成功')
-      const redirect = (route.query.redirect as string) || '/'
-      router.replace(redirect)
+      
+      // 等待下一个tick确保状态更新
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
+      // 根据用户角色跳转
+      if (res.userInfo.role === 'admin') {
+        console.log('管理员登录，跳转到 /admin')
+        await router.replace('/admin')
+      } else {
+        const redirect = (route.query.redirect as string) || '/'
+        console.log('普通用户登录，跳转到', redirect)
+        await router.replace(redirect)
+      }
     } catch (error: any) {
       console.error(error)
     } finally {
@@ -50,6 +78,12 @@ const onSubmit = () => {
     <div class="auth-card">
       <h2>登录</h2>
       <el-form ref="formRef" :model="form" :rules="rules" label-position="top">
+        <el-form-item label="身份选择" prop="role">
+          <el-radio-group v-model="form.role">
+            <el-radio value="student">学生</el-radio>
+            <el-radio value="admin">管理员</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="用户名/邮箱/手机号" prop="account">
           <el-input v-model="form.account" placeholder="请输入" autocomplete="username" />
         </el-form-item>

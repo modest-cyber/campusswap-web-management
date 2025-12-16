@@ -14,11 +14,10 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="queryParams.status" placeholder="全部" clearable>
-            <el-option label="待审核" :value="1" />
-            <el-option label="在售" :value="2" />
-            <el-option label="拒绝" :value="3" />
-            <el-option label="下架" :value="4" />
-            <el-option label="已售出" :value="5" />
+            <el-option label="在售" :value="1" />
+            <el-option label="下架" :value="2" />
+            <el-option label="已售出" :value="3" />
+            <el-option label="拒绝" :value="4" />
           </el-select>
         </el-form-item>
         <el-form-item label="分类">
@@ -54,8 +53,8 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="商品名称" width="200" />
-        <el-table-column prop="categoryName" label="分类" width="100" />
+        <el-table-column prop="name" label="商品名称" min-width="200" />
+        <el-table-column prop="categoryName" label="分类" min-width="100" />
         <el-table-column label="价格" width="100">
           <template #default="{ row }">
             <span style="color: #f56c6c; font-weight: 600">¥{{ row.price }}</span>
@@ -63,11 +62,11 @@
         </el-table-column>
         <el-table-column label="状态" width="100">
           <template #default="{ row }">
-            <el-tag v-if="row.status === 1" type="warning">待审核</el-tag>
-            <el-tag v-else-if="row.status === 2" type="success">在售</el-tag>
-            <el-tag v-else-if="row.status === 3" type="danger">拒绝</el-tag>
-            <el-tag v-else-if="row.status === 4" type="info">下架</el-tag>
-            <el-tag v-else-if="row.status === 5">已售出</el-tag>
+            <el-tag v-if="row.status === 0" type="warning">待审核</el-tag>
+            <el-tag v-else-if="row.status === 1" type="success">在售</el-tag>
+            <el-tag v-else-if="row.status === 2" type="info">下架</el-tag>
+            <el-tag v-else-if="row.status === 3">已售出</el-tag>
+            <el-tag v-else-if="row.status === 4" type="danger">拒绝</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="发布者" width="120">
@@ -76,8 +75,8 @@
             <div style="font-size: 12px; color: #909399">{{ row.userDepartment }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="发布时间" width="180" />
-        <el-table-column label="操作" width="180" fixed="right">
+        <el-table-column prop="createdAt" label="发布时间" min-width="160" />
+        <el-table-column label="操作" min-width="200" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="handleViewDetail(row)">
               详情
@@ -87,7 +86,7 @@
               type="warning" 
               size="small" 
               @click="handleOffline(row)"
-              v-if="row.status === 2"
+              v-if="row.status === 1"
             >
               下架
             </el-button>
@@ -129,11 +128,11 @@
           <el-descriptions-item label="成色">{{ currentProduct.quality }}</el-descriptions-item>
           <el-descriptions-item label="交易方式">{{ currentProduct.tradeMethod }}</el-descriptions-item>
           <el-descriptions-item label="状态">
-            <el-tag v-if="currentProduct.status === 1" type="warning">待审核</el-tag>
-            <el-tag v-else-if="currentProduct.status === 2" type="success">在售</el-tag>
-            <el-tag v-else-if="currentProduct.status === 3" type="danger">拒绝</el-tag>
-            <el-tag v-else-if="currentProduct.status === 4" type="info">下架</el-tag>
-            <el-tag v-else-if="currentProduct.status === 5">已售出</el-tag>
+            <el-tag v-if="currentProduct.status === 0" type="warning">待审核</el-tag>
+            <el-tag v-else-if="currentProduct.status === 1" type="success">在售</el-tag>
+            <el-tag v-else-if="currentProduct.status === 2" type="info">下架</el-tag>
+            <el-tag v-else-if="currentProduct.status === 3">已售出</el-tag>
+            <el-tag v-else-if="currentProduct.status === 4" type="danger">拒绝</el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="发布者">{{ currentProduct.username }}</el-descriptions-item>
           <el-descriptions-item label="发布者院系">{{ currentProduct.userDepartment }}</el-descriptions-item>

@@ -8,14 +8,16 @@ export interface LoginParams {
 export interface RegisterParams {
   username: string
   password: string
+  realName: string
   email: string
   phone: string
-  department?: string
+  studentId: string
+  department: string
 }
 
 export interface LoginResult {
   token: string
-  user: {
+  userInfo: {
     id: number
     username: string
     role: 'user' | 'admin'
@@ -44,7 +46,7 @@ export function register(params: RegisterParams) {
 }
 
 export function fetchUserInfo() {
-  return request<LoginResult['user']>({
+  return request<LoginResult['userInfo']>({
     method: 'GET',
     url: '/api/user/info'
   })

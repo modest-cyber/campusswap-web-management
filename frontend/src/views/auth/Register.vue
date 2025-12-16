@@ -11,16 +11,23 @@ const form = reactive({
   username: '',
   password: '',
   confirmPassword: '',
+  realName: '',
   email: '',
   phone: '',
+  studentId: '',
   department: ''
 })
 
 const rules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 3, max: 20, message: '用户名长度必须在3-20之间', trigger: 'blur' },
+    { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名只能包含字母、数字和下划线', trigger: 'blur' }
+  ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 8, message: '密码长度至少8位，包含数字和字母', trigger: 'blur' }
+    { min: 6, max: 20, message: '密码长度必须在6-20之间', trigger: 'blur' },
+    { pattern: /^(?=.*[a-zA-Z])(?=.*\d).+$/, message: '密码必须包含字母和数字', trigger: 'blur' }
   ],
   confirmPassword: [
     { required: true, message: '请再次输入密码', trigger: 'blur' },
@@ -32,8 +39,16 @@ const rules = {
       trigger: 'blur'
     }
   ],
-  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }],
-  phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+  realName: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
+  ],
+  phone: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }
+  ],
+  studentId: [{ required: true, message: '请输入学号', trigger: 'blur' }],
   department: [{ required: true, message: '请输入院系', trigger: 'blur' }]
 }
 
@@ -47,8 +62,10 @@ const onSubmit = () => {
       await register({
         username: form.username,
         password: form.password,
+        realName: form.realName,
         email: form.email,
         phone: form.phone,
+        studentId: form.studentId,
         department: form.department
       })
       ElMessage.success('注册成功，请登录')
@@ -70,11 +87,17 @@ const onSubmit = () => {
         <el-form-item label="用户名" prop="username">
           <el-input v-model="form.username" placeholder="请输入用户名" autocomplete="username" />
         </el-form-item>
+        <el-form-item label="真实姓名" prop="realName">
+          <el-input v-model="form.realName" placeholder="请输入真实姓名" autocomplete="name" />
+        </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入邮箱" autocomplete="email" />
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" autocomplete="tel" />
+        </el-form-item>
+        <el-form-item label="学号" prop="studentId">
+          <el-input v-model="form.studentId" placeholder="请输入学号" />
         </el-form-item>
         <el-form-item label="院系" prop="department">
           <el-input v-model="form.department" placeholder="请输入院系" />

@@ -44,6 +44,6 @@ jwt:
 # 文件存储路径
 file:
   upload:
-    path: uploads/
+    path: C:/Users/Asus/java_projects/Test/campusswap-web-management/uploads/
   access:
     url: http://localhost:8080/uploads/

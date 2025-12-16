@@ -138,7 +138,7 @@ export interface StatsQueryParams {
 // 获取仪表盘统计数据
 export function getDashboardStats() {
   return request<DashboardStats>({
-    url: '/admin/stats/dashboard',
+    url: '/api/admin/stats/dashboard',
     method: 'get'
   })
 }
@@ -146,7 +146,7 @@ export function getDashboardStats() {
 // 用户管理
 export function getUserList(params: UserQueryParams) {
   return request<{ list: AdminUser[]; total: number }>({
-    url: '/admin/users',
+    url: '/api/admin/users',
     method: 'get',
     params
   })
@@ -154,14 +154,14 @@ export function getUserList(params: UserQueryParams) {
 
 export function getUserDetail(id: number) {
   return request<AdminUser>({
-    url: `/admin/users/${id}`,
+    url: `/api/admin/users/${id}`,
     method: 'get'
   })
 }
 
 export function updateUserStatus(id: number, status: number) {
   return request({
-    url: `/admin/users/${id}/status`,
+    url: `/api/admin/users/${id}/status`,
     method: 'put',
     data: { status }
   })
@@ -170,7 +170,7 @@ export function updateUserStatus(id: number, status: number) {
 // 商品审核
 export function getPendingReviewProducts(params: ProductQueryParams) {
   return request<{ list: ReviewProduct[]; total: number }>({
-    url: '/admin/products/pending',
+    url: '/api/admin/products/pending',
     method: 'get',
     params
   })
@@ -178,7 +178,7 @@ export function getPendingReviewProducts(params: ProductQueryParams) {
 
 export function getProductListForAdmin(params: ProductQueryParams) {
   return request<{ list: ReviewProduct[]; total: number }>({
-    url: '/admin/products',
+    url: '/api/admin/products',
     method: 'get',
     params
   })
@@ -186,7 +186,7 @@ export function getProductListForAdmin(params: ProductQueryParams) {
 
 export function reviewProduct(data: ReviewRequest) {
   return request({
-    url: '/admin/products/review',
+    url: '/api/admin/products/review',
     method: 'post',
     data
   })
@@ -194,7 +194,7 @@ export function reviewProduct(data: ReviewRequest) {
 
 export function batchReviewProducts(data: ReviewRequest[]) {
   return request({
-    url: '/admin/products/review/batch',
+    url: '/api/admin/products/review/batch',
     method: 'post',
     data
   })
@@ -202,7 +202,7 @@ export function batchReviewProducts(data: ReviewRequest[]) {
 
 export function deleteProduct(id: number) {
   return request({
-    url: `/admin/products/${id}`,
+    url: `/api/admin/products/${id}`,
     method: 'delete'
   })
 }
@@ -210,7 +210,7 @@ export function deleteProduct(id: number) {
 // 订单管理
 export function getOrderListForAdmin(params: any) {
   return request<{ list: any[]; total: number }>({
-    url: '/admin/orders',
+    url: '/api/admin/orders',
     method: 'get',
     params
   })
@@ -218,7 +218,7 @@ export function getOrderListForAdmin(params: any) {
 
 export function getOrderDetailForAdmin(id: number) {
   return request<any>({
-    url: `/admin/orders/${id}`,
+    url: `/api/admin/orders/${id}`,
     method: 'get'
   })
 }
@@ -226,21 +226,21 @@ export function getOrderDetailForAdmin(id: number) {
 // 分类管理
 export function getCategoryTree() {
   return request<Category[]>({
-    url: '/admin/categories/tree',
+    url: '/api/admin/categories/tree',
     method: 'get'
   })
 }
 
 export function getCategoryList() {
   return request<Category[]>({
-    url: '/admin/categories',
+    url: '/api/admin/categories',
     method: 'get'
   })
 }
 
 export function createCategory(data: CategoryForm) {
   return request({
-    url: '/admin/categories',
+    url: '/api/admin/categories',
     method: 'post',
     data
   })
@@ -248,7 +248,7 @@ export function createCategory(data: CategoryForm) {
 
 export function updateCategory(id: number, data: CategoryForm) {
   return request({
-    url: `/admin/categories/${id}`,
+    url: `/api/admin/categories/${id}`,
     method: 'put',
     data
   })
@@ -256,14 +256,14 @@ export function updateCategory(id: number, data: CategoryForm) {
 
 export function deleteCategory(id: number) {
   return request({
-    url: `/admin/categories/${id}`,
+    url: `/api/admin/categories/${id}`,
     method: 'delete'
   })
 }
 
 export function updateCategoryStatus(id: number, status: number) {
   return request({
-    url: `/admin/categories/${id}/status`,
+    url: `/api/admin/categories/${id}/status`,
     method: 'put',
     data: { status }
   })
@@ -272,7 +272,7 @@ export function updateCategoryStatus(id: number, status: number) {
 // 统计报表
 export function getUserStats(params: StatsQueryParams) {
   return request<UserStats[]>({
-    url: '/admin/stats/users',
+    url: '/api/admin/stats/users',
     method: 'get',
     params
   })
@@ -280,14 +280,14 @@ export function getUserStats(params: StatsQueryParams) {
 
 export function getDepartmentStats() {
   return request<DepartmentStats[]>({
-    url: '/admin/stats/departments',
+    url: '/api/admin/stats/departments',
     method: 'get'
   })
 }
 
 export function getProductStats(params: StatsQueryParams) {
   return request<ProductStats[]>({
-    url: '/admin/stats/products',
+    url: '/api/admin/stats/products',
     method: 'get',
     params
   })
@@ -295,14 +295,14 @@ export function getProductStats(params: StatsQueryParams) {
 
 export function getCategoryDistribution() {
   return request<CategoryDistribution[]>({
-    url: '/admin/stats/categories',
+    url: '/api/admin/stats/categories',
     method: 'get'
   })
 }
 
 export function getTradeStats(params: StatsQueryParams) {
   return request<TradeStats[]>({
-    url: '/admin/stats/trades',
+    url: '/api/admin/stats/trades',
     method: 'get',
     params
   })
@@ -310,7 +310,7 @@ export function getTradeStats(params: StatsQueryParams) {
 
 export function getTradeMethodStats(params: StatsQueryParams) {
   return request<TradeMethodStats[]>({
-    url: '/admin/stats/trade-methods',
+    url: '/api/admin/stats/trade-methods',
     method: 'get',
     params
   })
@@ -318,7 +318,7 @@ export function getTradeMethodStats(params: StatsQueryParams) {
 
 export function getBuyerRank(params: StatsQueryParams) {
   return request<RankItem[]>({
-    url: '/admin/stats/rank/buyers',
+    url: '/api/admin/stats/rank/buyers',
     method: 'get',
     params
   })
@@ -326,7 +326,7 @@ export function getBuyerRank(params: StatsQueryParams) {
 
 export function getSellerRank(params: StatsQueryParams) {
   return request<RankItem[]>({
-    url: '/admin/stats/rank/sellers',
+    url: '/api/admin/stats/rank/sellers',
     method: 'get',
     params
   })
@@ -334,7 +334,7 @@ export function getSellerRank(params: StatsQueryParams) {
 
 export function getHotProducts(params: StatsQueryParams) {
   return request<any[]>({
-    url: '/admin/stats/hot-products',
+    url: '/api/admin/stats/hot-products',
     method: 'get',
     params
   })

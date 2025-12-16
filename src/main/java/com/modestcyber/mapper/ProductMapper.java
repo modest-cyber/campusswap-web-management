@@ -92,14 +92,14 @@ public interface ProductMapper {
     /**
      * 查询我的商品
      */
-    @Select("SELECT * FROM product WHERE user_id = #{userId} ORDER BY create_time DESC LIMIT #{offset}, #{limit}")
-    List<Product> listMyProducts(@Param("userId") Long userId, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    @SelectProvider(type = ProductSqlProvider.class, method = "listMyProducts")
+    List<Product> listMyProducts(@Param("userId") Long userId, @Param("status") Integer status, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 查询我的商品总数
      */
-    @Select("SELECT COUNT(*) FROM product WHERE user_id = #{userId}")
-    Long countMyProducts(Long userId);
+    @SelectProvider(type = ProductSqlProvider.class, method = "countMyProducts")
+    Long countMyProducts(@Param("userId") Long userId, @Param("status") Integer status);
 
     /**
      * 统计总商品数
@@ -118,4 +118,10 @@ public interface ProductMapper {
      */
     @Select("SELECT COUNT(*) FROM product WHERE status = 1")
     Long countOnSale();
+
+    /**
+     * 统计待审核商品数
+     */
+    @Select("SELECT COUNT(*) FROM product WHERE status = 0")
+    Long countPendingReview();
 }

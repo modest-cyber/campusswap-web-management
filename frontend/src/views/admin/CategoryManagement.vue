@@ -14,21 +14,21 @@
         style="width: 100%"
       >
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="name" label="分类名称" width="200" />
-        <el-table-column prop="level" label="层级" width="80">
+        <el-table-column prop="name" label="分类名称" min-width="200" />
+        <el-table-column prop="level" label="层级" width="100">
           <template #default="{ row }">
             <el-tag v-if="row.level === 1" type="primary">一级</el-tag>
             <el-tag v-else type="success">二级</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="sort" label="排序" width="100" />
+        <el-table-column prop="sort" label="排序" min-width="100" />
         <el-table-column label="状态" width="100">
           <template #default="{ row }">
             <el-tag v-if="row.status === 1" type="success">启用</el-tag>
             <el-tag v-else type="info">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="300" fixed="right">
+        <el-table-column label="操作" min-width="340" fixed="right">
           <template #default="{ row }">
             <el-button 
               link 

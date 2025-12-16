@@ -37,26 +37,26 @@
         style="width: 100%"
       >
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="username" label="用户名" width="120" />
-        <el-table-column prop="nickname" label="昵称" width="120" />
-        <el-table-column prop="realName" label="真实姓名" width="120" />
-        <el-table-column prop="department" label="院系" width="150" />
-        <el-table-column prop="phone" label="手机号" width="120" />
-        <el-table-column prop="email" label="邮箱" width="180" />
-        <el-table-column label="角色" width="80">
+        <el-table-column prop="username" label="用户名" min-width="120" />
+        <el-table-column prop="nickname" label="昵称" min-width="120" />
+        <el-table-column prop="realName" label="真实姓名" min-width="120" />
+        <el-table-column prop="department" label="院系" min-width="150" />
+        <el-table-column prop="phone" label="手机号" min-width="140" />
+        <el-table-column prop="email" label="邮箱" min-width="180" />
+        <el-table-column label="角色" width="100">
           <template #default="{ row }">
             <el-tag v-if="row.role === 1" type="danger">管理员</el-tag>
             <el-tag v-else type="success">普通用户</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="80">
+        <el-table-column label="状态" width="100">
           <template #default="{ row }">
             <el-tag v-if="row.status === 1" type="success">正常</el-tag>
             <el-tag v-else type="danger">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="注册时间" width="180" />
-        <el-table-column label="操作" width="180" fixed="right">
+        <el-table-column prop="createdAt" label="注册时间" min-width="160" />
+        <el-table-column label="操作" min-width="180" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="handleViewDetail(row)">
               详情

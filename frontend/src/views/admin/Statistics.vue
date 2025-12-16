@@ -23,7 +23,7 @@
       </el-form>
     </el-card>
     
-    <el-tabs v-model="activeTab">
+    <el-tabs v-model="activeTab" @tab-change="handleTabChange">
       <el-tab-pane label="用户统计" name="user">
         <el-row :gutter="20">
           <el-col :span="24">
@@ -277,12 +277,34 @@ const loadUserStats = async () => {
         deptChart = echarts.init(departmentChart.value)
       }
       
+      const chartData = deptData.map((d: DepartmentStats) => ({ name: d.department, value: d.count }))
+      
       deptChart.setOption({
-        tooltip: { trigger: 'item' },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: chartData.map(d => d.name)
+        },
         series: [{
           type: 'pie',
-          radius: '60%',
-          data: deptData.map((d: DepartmentStats) => ({ name: d.department, value: d.count }))
+          radius: ['40%', '70%'],
+          center: ['60%', '50%'],
+          data: chartData,
+          label: {
+            show: true,
+            formatter: '{b}: {d}%'
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
         }]
       })
     }
@@ -320,12 +342,34 @@ const loadProductStats = async () => {
         catChart = echarts.init(categoryChart.value)
       }
       
+      const chartData = catData.map((d: CategoryDistribution) => ({ name: d.categoryName, value: d.count }))
+      
       catChart.setOption({
-        tooltip: { trigger: 'item' },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: chartData.map(d => d.name)
+        },
         series: [{
           type: 'pie',
-          radius: '60%',
-          data: catData.map((d: CategoryDistribution) => ({ name: d.categoryName, value: d.count }))
+          radius: ['40%', '70%'],
+          center: ['60%', '50%'],
+          data: chartData,
+          label: {
+            show: true,
+            formatter: '{b}: {d}%'
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
         }]
       })
     }
@@ -377,12 +421,34 @@ const loadTradeStats = async () => {
         methodChart = echarts.init(tradeMethodChart.value)
       }
       
+      const chartData = methodData.map((d: TradeMethodStats) => ({ name: d.method, value: d.count }))
+      
       methodChart.setOption({
-        tooltip: { trigger: 'item' },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c} ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: chartData.map(d => d.name)
+        },
         series: [{
           type: 'pie',
-          radius: '60%',
-          data: methodData.map((d: TradeMethodStats) => ({ name: d.method, value: d.count }))
+          radius: ['40%', '70%'],
+          center: ['60%', '50%'],
+          data: chartData,
+          label: {
+            show: true,
+            formatter: '{b}: {d}%'
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
         }]
       })
     }
@@ -407,6 +473,18 @@ const loadAllStats = async () => {
     loadProductStats(),
     loadTradeStats()
   ])
+}
+
+const handleTabChange = () => {
+  // 切换标签页后重新调整图表大小
+  setTimeout(() => {
+    userChart?.resize()
+    deptChart?.resize()
+    productChart?.resize()
+    catChart?.resize()
+    tradeChart?.resize()
+    methodChart?.resize()
+  }, 100)
 }
 
 onMounted(() => {

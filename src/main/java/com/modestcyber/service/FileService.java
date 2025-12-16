@@ -53,9 +53,12 @@ public class FileService {
             String relativePath = fileType + File.separator + dateDir;
             Path dirPath = Paths.get(uploadPath, relativePath);
 
+            log.info("开始上传文件: {}, 目标路径: {}", originalFilename, dirPath.toAbsolutePath());
+
             // 创建目录
             if (!Files.exists(dirPath)) {
                 Files.createDirectories(dirPath);
+                log.info("创建目录: {}", dirPath.toAbsolutePath());
             }
 
             // 保存文件
@@ -68,8 +71,8 @@ public class FileService {
             return fileUrl;
 
         } catch (IOException e) {
-            log.error("文件上传失败", e);
-            throw new BusinessException("文件上传失败");
+            log.error("文件上传失败: ", e);
+            throw new BusinessException("文件上传失败: " + e.getMessage());
         }
     }
 

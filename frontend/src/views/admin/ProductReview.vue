@@ -34,7 +34,7 @@
           type="success" 
           size="small"
           :disabled="selectedIds.length === 0"
-          @click="handleBatchReview(2)"
+          @click="handleBatchReview(1)"
           style="margin-left: 10px"
         >
           批量通过
@@ -43,7 +43,7 @@
           type="danger" 
           size="small"
           :disabled="selectedIds.length === 0"
-          @click="handleBatchReview(3)"
+          @click="handleBatchReview(4)"
         >
           批量拒绝
         </el-button>
@@ -68,31 +68,31 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="商品名称" width="200" />
-        <el-table-column prop="categoryName" label="分类" width="100" />
+        <el-table-column prop="name" label="商品名称" min-width="200" />
+        <el-table-column prop="categoryName" label="分类" min-width="100" />
         <el-table-column label="价格" width="100">
           <template #default="{ row }">
             <span style="color: #f56c6c; font-weight: 600">¥{{ row.price }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="quality" label="成色" width="80" />
-        <el-table-column prop="tradeMethod" label="交易方式" width="100" />
+        <el-table-column prop="quality" label="成色" min-width="80" />
+        <el-table-column prop="tradeMethod" label="交易方式" min-width="100" />
         <el-table-column label="发布者" width="120">
           <template #default="{ row }">
             <div>{{ row.username }}</div>
             <div style="font-size: 12px; color: #909399">{{ row.userDepartment }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="发布时间" width="180" />
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column prop="createdAt" label="发布时间" min-width="160" />
+        <el-table-column label="操作" min-width="220" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="handleViewDetail(row)">
               查看详情
             </el-button>
-            <el-button link type="success" size="small" @click="handleReview(row, 2)">
+            <el-button link type="success" size="small" @click="handleReview(row, 1)">
               通过
             </el-button>
-            <el-button link type="danger" size="small" @click="handleReview(row, 3)">
+            <el-button link type="danger" size="small" @click="handleReview(row, 4)">
               拒绝
             </el-button>
           </template>
@@ -155,10 +155,10 @@
       
       <template #footer>
         <el-button @click="detailVisible = false">关闭</el-button>
-        <el-button type="success" @click="handleReview(currentProduct!, 2)">
+        <el-button type="success" @click="handleReview(currentProduct!, 1)">
           通过
         </el-button>
-        <el-button type="danger" @click="handleReview(currentProduct!, 3)">
+        <el-button type="danger" @click="handleReview(currentProduct!, 4)">
           拒绝
         </el-button>
       </template>
@@ -266,7 +266,7 @@ const handleSelectAll = (val: boolean) => {
 }
 
 const handleReview = async (row: ReviewProduct, status: number) => {
-  if (status === 3) {
+  if (status === 4) {
     rejectForm.productId = row.id
     rejectForm.reason = ''
     rejectForm.isBatch = false
@@ -297,7 +297,7 @@ const handleReview = async (row: ReviewProduct, status: number) => {
 }
 
 const handleBatchReview = async (status: number) => {
-  if (status === 3) {
+  if (status === 4) {
     rejectForm.productId = 0
     rejectForm.reason = ''
     rejectForm.isBatch = true
@@ -337,7 +337,7 @@ const confirmReject = async () => {
     if (rejectForm.isBatch) {
       const requests = selectedIds.value.map(id => ({ 
         productId: id, 
-        status: 3, 
+        status: 4, 
         reason: rejectForm.reason 
       }))
       await batchReviewProducts(requests)
@@ -345,7 +345,7 @@ const confirmReject = async () => {
     } else {
       await reviewProduct({ 
         productId: rejectForm.productId, 
-        status: 3, 
+        status: 4, 
         reason: rejectForm.reason 
       })
       ElMessage.success('拒绝成功')

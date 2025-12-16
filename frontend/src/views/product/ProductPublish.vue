@@ -72,7 +72,6 @@
           <el-radio-group v-model="form.transactionType">
             <el-radio :value="1">面交</el-radio>
             <el-radio :value="2">邮寄</el-radio>
-            <el-radio :value="3">均可</el-radio>
           </el-radio-group>
         </el-form-item>
         
@@ -133,6 +132,7 @@ import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
 import { useAuthStore } from '../../store/auth'
+import { publishProduct, updateProduct, getProductDetail, type PublishProductParams } from '../../api/product'
 
 const route = useRoute()
 const router = useRouter()
@@ -151,7 +151,7 @@ const form = reactive({
   price: undefined as number | undefined,
   originalPrice: undefined as number | undefined,
   condition: '',
-  transactionType: 3,
+  transactionType: 1,
   description: '',
   images: [] as string[]
 })
@@ -170,7 +170,7 @@ const categories = ref([
 ])
 
 // 上传地址
-const uploadUrl = computed(() => `${import.meta.env.VITE_API_BASE_URL || ''}/api/file/upload`)
+const uploadUrl = '/api/file/upload'
 
 // 上传请求头
 const uploadHeaders = computed(() => ({
@@ -243,7 +243,7 @@ const beforeUpload: UploadProps['beforeUpload'] = (file) => {
 // 上传成功
 const handleUploadSuccess: UploadProps['onSuccess'] = (response, file) => {
   if (response.code === 0) {
-    form.images.push(response.data.url)
+    form.images.push(response.data)
     ElMessage.success('上传成功')
   } else {
     ElMessage.error(response.message || '上传失败')
@@ -283,21 +283,27 @@ const handleSubmit = async () => {
     
     loading.value = true
     try {
-      // 实际开发中调用 API
-      // if (isEdit.value) {
-      //   await updateProduct(route.params.id, form)
-      // } else {
-      //   await createProduct(form)
-      // }
+      const data: PublishProductParams = {
+        title: form.title,
+        description: form.description,
+        price: form.price!,
+        originalPrice: form.originalPrice,
+        categoryId: form.categoryId!,
+        condition: form.condition,
+        transactionType: form.transactionType,
+        images: form.images
+      }
       
-      // 模拟延迟
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      if (isEdit.value) {
+        await updateProduct(route.params.id as string, data)
+      } else {
+        await publishProduct(data)
+      }
       
       ElMessage.success(isEdit.value ? '修改成功' : '发布成功')
       router.push('/mine/products')
     } catch (error) {
       console.error('提交失败:', error)
-      ElMessage.error('提交失败，请重试')
     } finally {
       loading.value = false
     }

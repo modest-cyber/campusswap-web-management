@@ -116,6 +116,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import ProductCard from '../components/ProductCard.vue'
 import type { Product, Category } from '../api/product'
+import { listProducts } from '../api/product'
 
 const route = useRoute()
 
@@ -157,121 +158,26 @@ const conditions = [
 // 搜索关键词
 const keyword = ref('')
 
-// 模拟商品数据
-const mockProducts: Product[] = [
-  { 
-    id: 1, 
-    title: 'iPhone 13 Pro', 
-    price: 5999, 
-    originalPrice: 7999, 
-    condition: '99成新', 
-    images: ['https://via.placeholder.com/200x150?text=iPhone13Pro'],
-    viewCount: 120, 
-    favoriteCount: 20,
-    categoryName: '数码产品',
-    sellerName: '张三',
-    sellerDepartment: '计算机学院',
-    createdAt: '2024-01-15',
-    isFavorite: false
-  },
-  { 
-    id: 2, 
-    title: '全新未拆封 AirPods Pro', 
-    price: 1299, 
-    originalPrice: 1999, 
-    condition: '全新', 
-    images: ['https://via.placeholder.com/200x150?text=AirPodsPro'],
-    viewCount: 80, 
-    favoriteCount: 15,
-    categoryName: '数码产品',
-    sellerName: '李四',
-    sellerDepartment: '电子工程学院',
-    createdAt: '2024-01-14',
-    isFavorite: true
-  },
-  { 
-    id: 3, 
-    title: '《JavaScript高级程序设计》第4版', 
-    price: 80, 
-    originalPrice: 128, 
-    condition: '9成新', 
-    images: ['https://via.placeholder.com/200x150?text=JavaScriptBook'],
-    viewCount: 50, 
-    favoriteCount: 8,
-    categoryName: '图书音像',
-    sellerName: '王五',
-    sellerDepartment: '计算机学院',
-    createdAt: '2024-01-13',
-    isFavorite: false
-  },
-  { 
-    id: 4, 
-    title: '李宁篮球鞋 42码', 
-    price: 299, 
-    originalPrice: 599, 
-    condition: '95成新', 
-    images: ['https://via.placeholder.com/200x150?text=LiNingShoes'],
-    viewCount: 65, 
-    favoriteCount: 12,
-    categoryName: '服饰鞋包',
-    sellerName: '赵六',
-    sellerDepartment: '体育学院',
-    createdAt: '2024-01-12',
-    isFavorite: false
-  },
-  { 
-    id: 5, 
-    title: 'MacBook Pro 2022款', 
-    price: 12999, 
-    originalPrice: 16999, 
-    condition: '98成新', 
-    images: ['https://via.placeholder.com/200x150?text=MacBookPro'],
-    viewCount: 200, 
-    favoriteCount: 35,
-    categoryName: '数码产品',
-    sellerName: '孙七',
-    sellerDepartment: '计算机学院',
-    createdAt: '2024-01-11',
-    isFavorite: false
-  },
-  { 
-    id: 6, 
-    title: '瑜伽垫', 
-    price: 50, 
-    originalPrice: 120, 
-    condition: '9成新', 
-    images: ['https://via.placeholder.com/200x150?text=YogaMat'],
-    viewCount: 30, 
-    favoriteCount: 5,
-    categoryName: '体育用品',
-    sellerName: '周八',
-    sellerDepartment: '体育学院',
-    createdAt: '2024-01-10',
-    isFavorite: false
-  }
-]
-
 // 获取商品列表
 const fetchProducts = async () => {
   try {
-    // 实际开发中调用API时使用
-    // const result = await listProducts({
-    //   keyword: keyword.value,
-    //   categoryId: selectedCategories.value.length > 0 ? selectedCategories.value[0] : undefined,
-    //   minPrice: priceRange.value.min,
-    //   maxPrice: priceRange.value.max,
-    //   sort: sortBy.value,
-    //   pageNum: currentPage.value,
-    //   pageSize: pageSize.value
-    // })
-    // products.value = result.list
-    // totalProducts.value = result.total
-    
-    // 目前使用模拟数据
-    products.value = mockProducts
-    totalProducts.value = mockProducts.length
+    // 调用API获取商品列表，只显示在售状态的商品
+    const result = await listProducts({
+      keyword: keyword.value,
+      categoryId: selectedCategories.value.length > 0 ? selectedCategories.value[0] : undefined,
+      minPrice: priceRange.value.min,
+      maxPrice: priceRange.value.max,
+      status: 1,  // 只显示在售商品
+      sort: sortBy.value,
+      pageNum: currentPage.value,
+      pageSize: pageSize.value
+    })
+    products.value = result.list || []
+    totalProducts.value = result.total || 0
   } catch (error) {
     console.error('Failed to fetch products:', error)
+    products.value = []
+    totalProducts.value = 0
   }
 }
 

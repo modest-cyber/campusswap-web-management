@@ -96,9 +96,10 @@ public class ProductController {
      */
     @GetMapping("/my")
     public Result<PageResult<ProductResponse>> listMyProducts(
+            @RequestParam(required = false) Integer status,
             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        PageResult<ProductResponse> result = productService.listMyProducts(pageNum, pageSize);
+        PageResult<ProductResponse> result = productService.listMyProducts(status, pageNum, pageSize);
         return Result.success(result);
     }
 

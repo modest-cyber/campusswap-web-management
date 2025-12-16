@@ -67,9 +67,6 @@
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <div class="action-buttons">
-              <el-button link type="primary" @click="handleEdit(row)" v-if="row.status !== 3">
-                编辑
-              </el-button>
               <el-button 
                 link 
                 :type="row.status === 1 ? 'warning' : 'success'" 
@@ -80,9 +77,6 @@
               </el-button>
               <el-button link type="danger" @click="handleDelete(row)" v-if="row.status !== 3">
                 删除
-              </el-button>
-              <el-button link type="info" @click="handleView(row)">
-                查看
               </el-button>
             </div>
           </template>
@@ -111,6 +105,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { Product } from '../../api/product'
+import { getMyProducts, deleteProduct, updateProductStatus } from '../../api/product'
 
 const router = useRouter()
 
@@ -193,22 +188,12 @@ const getStatusText = (status?: number) => {
 const fetchProducts = async () => {
   loading.value = true
   try {
-    // 实际开发中调用 API
-    // const result = await getMyProducts({
-    //   status: statusFilter.value ? Number(statusFilter.value) : undefined,
-    //   pageNum: currentPage.value,
-    //   pageSize: pageSize.value
-    // })
-    // products.value = result.list
-    // total.value = result.total
-    
-    // 模拟数据
-    await new Promise(resolve => setTimeout(resolve, 300))
-    products.value = mockProducts
-    total.value = mockProducts.length
+    const status = statusFilter.value ? Number(statusFilter.value) : undefined
+    const result = await getMyProducts(currentPage.value, pageSize.value, status)
+    products.value = result.list
+    total.value = result.total
   } catch (error) {
     console.error('获取商品列表失败:', error)
-    ElMessage.error('获取商品列表失败')
   } finally {
     loading.value = false
   }
@@ -253,8 +238,7 @@ const handleToggleStatus = async (product: Product) => {
       type: 'warning'
     })
     
-    // 实际开发中调用 API
-    // await updateProductStatus(product.id, product.status === 1 ? 2 : 1)
+    await updateProductStatus(product.id, product.status === 1 ? 2 : 1)
     
     ElMessage.success(`${action}成功`)
     fetchProducts()
@@ -272,8 +256,7 @@ const handleDelete = async (product: Product) => {
       type: 'warning'
     })
     
-    // 实际开发中调用 API
-    // await deleteProduct(product.id)
+    await deleteProduct(product.id)
     
     ElMessage.success('删除成功')
     fetchProducts()

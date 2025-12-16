@@ -60,7 +60,14 @@ public class UserService {
         }
 
         // 验证密码
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        log.info("开始验证密码 - 账号: {}", request.getAccount());
+        log.info("输入的密码: {}", request.getPassword());
+        log.info("数据库中的哈希: {}", user.getPassword());
+        
+        boolean passwordMatch = passwordEncoder.matches(request.getPassword(), user.getPassword());
+        log.info("密码匹配结果: {}", passwordMatch);
+        
+        if (!passwordMatch) {
             throw new BusinessException("账号或密码错误");
         }
 

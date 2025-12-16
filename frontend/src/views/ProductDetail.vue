@@ -136,7 +136,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { toggleFavorite } from '../api/product'
+import { toggleFavorite, getProductDetail } from '../api/product'
 import type { Product } from '../api/product'
 import { Star, StarFilled, Message, Shop, Warning } from '@element-plus/icons-vue'
 
@@ -152,43 +152,13 @@ const product = ref<Product | null>(null)
 // 当前激活的图片索引
 const activeImageIndex = ref(0)
 
-// 模拟商品详情数据
-const mockProduct: Product = {
-  id: 1,
-  title: 'iPhone 13 Pro',
-  description: '<p>全新未拆封 iPhone 13 Pro，256GB 远峰蓝色。</p><p>支持面交和邮寄，价格可小刀。</p>',
-  price: 5999,
-  originalPrice: 7999,
-  images: [
-    'https://via.placeholder.com/400x300?text=iPhone13Pro1',
-    'https://via.placeholder.com/400x300?text=iPhone13Pro2',
-    'https://via.placeholder.com/400x300?text=iPhone13Pro3'
-  ],
-  status: 1,
-  condition: '99成新',
-  transactionType: 1,
-  viewCount: 120,
-  favoriteCount: 20,
-  categoryId: 1,
-  categoryName: '数码产品',
-  sellerName: '张三',
-  sellerDepartment: '计算机学院',
-  sellerAvatar: 'https://via.placeholder.com/40x40?text=张三',
-  createdAt: '2024-01-15',
-  isFavorite: false
-}
-
 // 获取商品详情
 const fetchProductDetail = async () => {
   try {
     if (!productId.value) return
     
-    // 实际开发中调用API
-    // const data = await getProductDetail(productId.value)
-    // product.value = data
-    
-    // 目前使用模拟数据
-    product.value = mockProduct
+    const data = await getProductDetail(productId.value)
+    product.value = data
   } catch (error) {
     console.error('Failed to fetch product detail:', error)
     ElMessage.error('获取商品详情失败')

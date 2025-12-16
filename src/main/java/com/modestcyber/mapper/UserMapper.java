@@ -3,6 +3,8 @@ package com.modestcyber.mapper;
 import com.modestcyber.pojo.User;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 /**
  * 用户Mapper
  */
@@ -83,4 +85,48 @@ public interface UserMapper {
      */
     @Select("SELECT COUNT(*) FROM user WHERE create_time BETWEEN #{start} AND #{end}")
     Long countByTime(@Param("start") java.time.LocalDateTime start, @Param("end") java.time.LocalDateTime end);
+
+    /**
+     * 查询用户列表（带筛选）
+     */
+    @Select("<script>" +
+            "SELECT * FROM user WHERE 1=1" +
+            "<if test='keyword != null and keyword != \"\"'>" +
+            " AND (username LIKE CONCAT('%', #{keyword}, '%') OR email LIKE CONCAT('%', #{keyword}, '%') OR phone LIKE CONCAT('%', #{keyword}, '%'))" +
+            "</if>" +
+            "<if test='department != null and department != \"\"'>" +
+            " AND department = #{department}" +
+            "</if>" +
+            "<if test='status != null'>" +
+            " AND status = #{status}" +
+            "</if>" +
+            " ORDER BY create_time DESC LIMIT #{offset}, #{limit}" +
+            "</script>")
+    List<User> listUsers(@Param("keyword") String keyword,
+                         @Param("department") String department,
+                         @Param("status") Integer status,
+                         @Param("offset") Integer offset,
+                         @Param("limit") Integer limit);
+
+    /**
+     * 统计用户数量（带筛选）
+     */
+    @Select("<script>" +
+            "SELECT COUNT(*) FROM user WHERE 1=1" +
+            "<if test='keyword != null and keyword != \"\"'>" +
+            " AND (username LIKE CONCAT('%', #{keyword}, '%') OR email LIKE CONCAT('%', #{keyword}, '%') OR phone LIKE CONCAT('%', #{keyword}, '%'))" +
+            "</if>" +
+            "<if test='department != null and department != \"\"'>" +
+            " AND department = #{department}" +
+            "</if>" +
+            "<if test='status != null'>" +
+            " AND status = #{status}" +
+            "</if>" +
+            "</script>")
+    Long countUsers(@Param("keyword") String keyword,
+                    @Param("department") String department,
+                    @Param("status") Integer status);
+
+    @Select("SELECT * FROM user")
+    List<User> findAll();
 }

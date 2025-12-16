@@ -50,8 +50,8 @@
         style="width: 100%"
       >
         <el-table-column prop="id" label="订单ID" width="80" />
-        <el-table-column prop="orderNo" label="订单号" width="180" />
-        <el-table-column label="商品信息" width="250">
+        <el-table-column prop="orderNo" label="订单号" min-width="180" />
+        <el-table-column label="商品信息" min-width="250">
           <template #default="{ row }">
             <div style="display: flex; gap: 10px; align-items: center">
               <el-image 
@@ -67,12 +67,12 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="买家" width="120">
+        <el-table-column label="买家" min-width="120">
           <template #default="{ row }">
             {{ row.buyerName || row.buyerId }}
           </template>
         </el-table-column>
-        <el-table-column label="卖家" width="120">
+        <el-table-column label="卖家" min-width="120">
           <template #default="{ row }">
             {{ row.sellerName || row.sellerId }}
           </template>
@@ -91,8 +91,8 @@
             <el-tag v-else-if="row.status === 5" type="danger">已取消</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" width="180" />
-        <el-table-column label="操作" width="120" fixed="right">
+        <el-table-column prop="createdAt" label="创建时间" min-width="160" />
+        <el-table-column label="操作" min-width="120" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="handleViewDetail(row)">
               查看详情

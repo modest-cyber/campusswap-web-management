@@ -7,7 +7,7 @@
           class="admin-menu"
           router
         >
-          <el-menu-item index="/admin">
+          <el-menu-item index="/admin/admin">
             <el-icon><DataLine /></el-icon>
             <span>仪表盘</span>
           </el-menu-item>
@@ -35,6 +35,10 @@
             <el-icon><TrendCharts /></el-icon>
             <span>统计报表</span>
           </el-menu-item>
+          <el-menu-item @click="handleLogout">
+            <el-icon><SwitchButton /></el-icon>
+            <span>退出登录</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
@@ -46,7 +50,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import {
   DataLine,
   User,
@@ -54,20 +58,43 @@ import {
   Goods,
   Document,
   Grid,
-  TrendCharts
+  TrendCharts,
+  SwitchButton
 } from '@element-plus/icons-vue'
+import { useAuthStore } from '../store/auth'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
+const router = useRouter()
 const route = useRoute()
+const authStore = useAuthStore()
 const currentRoute = computed(() => route.path)
+
+const handleLogout = async () => {
+  try {
+    await ElMessageBox.confirm('确认退出登录吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    
+    authStore.logout()
+    ElMessage.success('退出成功')
+    router.replace('/login')
+  } catch {
+    // 用户取消
+  }
+}
 </script>
 
 <style scoped>
 .admin-layout {
   height: 100vh;
+  width: 100%;
 }
 
 .el-container {
   height: 100%;
+  width: 100%;
 }
 
 .el-aside {
@@ -98,5 +125,23 @@ const currentRoute = computed(() => route.path)
 .el-main {
   background-color: #f0f2f5;
   padding: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* 强制所有子页面内容宽度为100% */
+.el-main :deep(.el-card) {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.el-main :deep(.user-management),
+.el-main :deep(.product-review),
+.el-main :deep(.product-management),
+.el-main :deep(.order-management),
+.el-main :deep(.category-management),
+.el-main :deep(.statistics) {
+  width: 100% !important;
+  max-width: none !important;
 }
 </style>

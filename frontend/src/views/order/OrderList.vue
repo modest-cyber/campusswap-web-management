@@ -146,6 +146,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
+import { getOrderList } from '../../api/order'
 
 const router = useRouter()
 
@@ -189,42 +190,6 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 
-// 模拟数据
-const mockOrders: Order[] = [
-  {
-    id: 1,
-    orderNo: 'ORD20240115001',
-    productId: 1,
-    productTitle: 'iPhone 13 Pro',
-    productImage: 'https://via.placeholder.com/80x80?text=iPhone13Pro',
-    buyerId: 2,
-    buyerName: '李四',
-    sellerId: 1,
-    sellerName: '张三',
-    quantity: 1,
-    totalAmount: 5999,
-    transactionType: 3,
-    status: 1,
-    createdAt: '2024-01-15 10:30:00'
-  },
-  {
-    id: 2,
-    orderNo: 'ORD20240114001',
-    productId: 2,
-    productTitle: 'AirPods Pro',
-    productImage: 'https://via.placeholder.com/80x80?text=AirPodsPro',
-    buyerId: 2,
-    buyerName: '李四',
-    sellerId: 3,
-    sellerName: '王五',
-    quantity: 1,
-    totalAmount: 1299,
-    transactionType: 2,
-    status: 2,
-    createdAt: '2024-01-14 14:20:00'
-  }
-]
-
 // 获取状态类型
 const getStatusType = (status: number) => {
   const typeMap: Record<number, string> = {
@@ -263,26 +228,22 @@ const getTransactionTypeName = (type: number) => {
 const fetchOrders = async () => {
   loading.value = true
   try {
-    // 实际开发中调用 API
-    // const result = await getOrderList({
-    //   viewType: viewType.value,
-    //   status: statusFilter.value === 'all' ? undefined : Number(statusFilter.value),
-    //   orderNo: searchKeyword.value,
-    //   startDate: dateRange.value?.[0],
-    //   endDate: dateRange.value?.[1],
-    //   pageNum: currentPage.value,
-    //   pageSize: pageSize.value
-    // })
-    // orders.value = result.list
-    // total.value = result.total
-    
-    // 模拟数据
-    await new Promise(resolve => setTimeout(resolve, 300))
-    orders.value = mockOrders
-    total.value = mockOrders.length
+    const result = await getOrderList({
+      viewType: viewType.value,
+      status: statusFilter.value === 'all' ? undefined : Number(statusFilter.value),
+      orderNo: searchKeyword.value,
+      startDate: dateRange.value?.[0],
+      endDate: dateRange.value?.[1],
+      pageNum: currentPage.value,
+      pageSize: pageSize.value
+    })
+    orders.value = result.data.list || []
+    total.value = result.data.total || 0
   } catch (error) {
     console.error('获取订单列表失败:', error)
     ElMessage.error('获取订单列表失败')
+    orders.value = []
+    total.value = 0
   } finally {
     loading.value = false
   }

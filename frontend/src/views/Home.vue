@@ -69,7 +69,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import ProductCard from '../components/ProductCard.vue'
-// import { fetchCategories, listProducts } from '../api/product'
+import { listProducts } from '../api/product'
 import type { Category, Product } from '../api/product'
 
 const router = useRouter()
@@ -97,70 +97,6 @@ const latestProducts = ref<Product[]>([])
 // 热门商品数据
 const hotProducts = ref<Product[]>([])
 
-// 模拟商品数据
-const mockProducts: Product[] = [
-  { 
-    id: 1, 
-    title: 'iPhone 13 Pro', 
-    price: 5999, 
-    originalPrice: 7999, 
-    condition: '99成新', 
-    images: ['https://via.placeholder.com/200x150?text=iPhone13Pro'],
-    viewCount: 120, 
-    favoriteCount: 20,
-    categoryName: '数码产品',
-    sellerName: '张三',
-    sellerDepartment: '计算机学院',
-    createdAt: '2024-01-15',
-    isFavorite: false
-  },
-  { 
-    id: 2, 
-    title: '全新未拆封 AirPods Pro', 
-    price: 1299, 
-    originalPrice: 1999, 
-    condition: '全新', 
-    images: ['https://via.placeholder.com/200x150?text=AirPodsPro'],
-    viewCount: 80, 
-    favoriteCount: 15,
-    categoryName: '数码产品',
-    sellerName: '李四',
-    sellerDepartment: '电子工程学院',
-    createdAt: '2024-01-14',
-    isFavorite: true
-  },
-  { 
-    id: 3, 
-    title: '《JavaScript高级程序设计》第4版', 
-    price: 80, 
-    originalPrice: 128, 
-    condition: '9成新', 
-    images: ['https://via.placeholder.com/200x150?text=JavaScriptBook'],
-    viewCount: 50, 
-    favoriteCount: 8,
-    categoryName: '图书音像',
-    sellerName: '王五',
-    sellerDepartment: '计算机学院',
-    createdAt: '2024-01-13',
-    isFavorite: false
-  },
-  { 
-    id: 4, 
-    title: '李宁篮球鞋 42码', 
-    price: 299, 
-    originalPrice: 599, 
-    condition: '95成新', 
-    images: ['https://via.placeholder.com/200x150?text=LiNingShoes'],
-    viewCount: 65, 
-    favoriteCount: 12,
-    categoryName: '服饰鞋包',
-    sellerName: '赵六',
-    sellerDepartment: '体育学院',
-    createdAt: '2024-01-12',
-    isFavorite: false
-  }
-]
-
 // 跳转到分类商品列表
 const goToCategory = (categoryId: number) => {
   router.push({ 
@@ -184,17 +120,25 @@ const loadCategories = async () => {
 // 获取商品数据
 const loadProducts = async () => {
   try {
-    // 实际开发中调用API
-    // const latestRes = await listProducts({ sort: 'latest', pageSize: 4 })
-    // latestProducts.value = latestRes.list
-    // const hotRes = await listProducts({ sort: 'hot', pageSize: 4 })
-    // hotProducts.value = hotRes.list
+    // 获取最新商品（按创建时间排序，只显示在售状态）
+    const latestRes = await listProducts({ 
+      sortBy: 'create_time', 
+      pageSize: 4,
+      status: 1  // 只显示在售商品
+    })
+    latestProducts.value = latestRes.list || []
     
-    // 目前使用模拟数据
-    latestProducts.value = mockProducts
-    hotProducts.value = mockProducts.slice(0, 2)
+    // 获取热门商品（按浏览量排序）
+    const hotRes = await listProducts({ 
+      sortBy: 'view_count', 
+      pageSize: 4,
+      status: 1  // 只显示在售商品
+    })
+    hotProducts.value = hotRes.list || []
   } catch (error) {
     console.error('Failed to load products:', error)
+    latestProducts.value = []
+    hotProducts.value = []
   }
 }
 

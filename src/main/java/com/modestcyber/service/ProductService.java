@@ -6,9 +6,11 @@ import com.modestcyber.dto.request.PublishProductRequest;
 import com.modestcyber.dto.request.UpdateProductRequest;
 import com.modestcyber.dto.response.ProductResponse;
 import com.modestcyber.exception.BusinessException;
+import com.modestcyber.mapper.CategoryMapper;
 import com.modestcyber.mapper.FavoriteMapper;
 import com.modestcyber.mapper.ProductMapper;
 import com.modestcyber.mapper.UserMapper;
+import com.modestcyber.pojo.Category;
 import com.modestcyber.pojo.Product;
 import com.modestcyber.pojo.User;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,9 @@ public class ProductService {
     @Autowired
     private FavoriteMapper favoriteMapper;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
     private static final Map<Integer, String> STATUS_MAP = new HashMap<>();
     private static final Map<Integer, String> TRANSACTION_TYPE_MAP = new HashMap<>();
 
@@ -70,14 +75,14 @@ public class ProductService {
         BeanUtils.copyProperties(request, product);
         product.setUserId(userId);
         product.setImages(convertListToJson(request.getImages()));
-        product.setStatus(1);  // 默认在售状态（可配置为待审核）
+        product.setStatus(0);  // 默认待审核状态，需要管理员审核后才能上架
         product.setViewCount(0);
         product.setFavoriteCount(0);
         product.setCreateTime(LocalDateTime.now());
         product.setUpdateTime(LocalDateTime.now());
 
         productMapper.insert(product);
-        log.info("用户 {} 发布商品: {}", userId, product.getTitle());
+        log.info("用户 {} 发布商品: {}，状态: 待审核", userId, product.getTitle());
         return product.getId();
     }
 
@@ -207,7 +212,7 @@ public class ProductService {
     /**
      * 我的商品
      */
-    public PageResult<ProductResponse> listMyProducts(Integer pageNum, Integer pageSize) {
+    public PageResult<ProductResponse> listMyProducts(Integer status, Integer pageNum, Integer pageSize) {
         Long userId = UserContext.getUserId();
         if (userId == null) {
             throw new BusinessException(401, "请先登录");
@@ -218,8 +223,8 @@ public class ProductService {
 
         int offset = (pageNum - 1) * pageSize;
 
-        List<Product> products = productMapper.listMyProducts(userId, offset, pageSize);
-        Long total = productMapper.countMyProducts(userId);
+        List<Product> products = productMapper.listMyProducts(userId, status, offset, pageSize);
+        Long total = productMapper.countMyProducts(userId, status);
 
         List<ProductResponse> responseList = products.stream()
                 .map(this::convertToProductResponse)
@@ -242,6 +247,18 @@ public class ProductService {
         User user = userMapper.findById(product.getUserId());
         if (user != null) {
             response.setUsername(user.getUsername());
+        }
+
+        // 查询分类信息
+        if (product.getCategoryId() != null) {
+            Category category = categoryMapper.findById(product.getCategoryId());
+            if (category != null) {
+                response.setCategoryName(category.getName());
+            } else {
+                response.setCategoryName("未分类");
+            }
+        } else {
+            response.setCategoryName("未分类");
         }
 
         // 检查是否已收藏

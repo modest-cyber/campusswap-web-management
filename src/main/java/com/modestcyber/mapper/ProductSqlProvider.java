@@ -72,4 +72,35 @@ public class ProductSqlProvider {
             }
         }}.toString();
     }
+
+    public String listMyProducts(Long userId, Integer status, Integer offset, Integer limit) {
+        return new SQL() {{
+            SELECT("*");
+            FROM("product");
+            WHERE("user_id = #{userId}");
+            
+            if (status != null) {
+                WHERE("status = #{status}");
+            }
+            
+            ORDER_BY("create_time DESC");
+            
+            if (offset != null && limit != null) {
+                LIMIT(limit);
+                OFFSET(offset);
+            }
+        }}.toString();
+    }
+
+    public String countMyProducts(Long userId, Integer status) {
+        return new SQL() {{
+            SELECT("COUNT(*)");
+            FROM("product");
+            WHERE("user_id = #{userId}");
+            
+            if (status != null) {
+                WHERE("status = #{status}");
+            }
+        }}.toString();
+    }
 }

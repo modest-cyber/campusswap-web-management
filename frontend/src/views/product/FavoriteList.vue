@@ -82,7 +82,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 import type { Product } from '../../api/product'
-import { toggleFavorite } from '../../api/product'
+import { toggleFavorite, getFavoriteList } from '../../api/product'
 
 const router = useRouter()
 
@@ -92,66 +92,6 @@ const loading = ref(false)
 const currentPage = ref(1)
 const pageSize = ref(12)
 const total = ref(0)
-
-// 模拟数据
-const mockProducts: Product[] = [
-  {
-    id: 1,
-    title: 'iPhone 13 Pro',
-    price: 5999,
-    originalPrice: 7999,
-    condition: '99成新',
-    images: ['https://via.placeholder.com/300x200?text=iPhone13Pro'],
-    viewCount: 120,
-    favoriteCount: 20,
-    categoryName: '数码产品',
-    status: 1,
-    createdAt: '2024-01-15',
-    isFavorite: true
-  },
-  {
-    id: 2,
-    title: '全新未拆封 AirPods Pro',
-    price: 1299,
-    originalPrice: 1999,
-    condition: '全新',
-    images: ['https://via.placeholder.com/300x200?text=AirPodsPro'],
-    viewCount: 80,
-    favoriteCount: 15,
-    categoryName: '数码产品',
-    status: 1,
-    createdAt: '2024-01-14',
-    isFavorite: true
-  },
-  {
-    id: 3,
-    title: '《JavaScript高级程序设计》第4版',
-    price: 80,
-    originalPrice: 128,
-    condition: '9成新',
-    images: ['https://via.placeholder.com/300x200?text=JavaScriptBook'],
-    viewCount: 50,
-    favoriteCount: 8,
-    categoryName: '图书音像',
-    status: 1,
-    createdAt: '2024-01-13',
-    isFavorite: true
-  },
-  {
-    id: 4,
-    title: 'MacBook Pro 2022款',
-    price: 12999,
-    originalPrice: 16999,
-    condition: '98成新',
-    images: ['https://via.placeholder.com/300x200?text=MacBookPro'],
-    viewCount: 200,
-    favoriteCount: 35,
-    categoryName: '数码产品',
-    status: 3,
-    createdAt: '2024-01-11',
-    isFavorite: true
-  }
-]
 
 // 获取状态类型
 const getStatusType = (status?: number) => {
@@ -179,21 +119,14 @@ const getStatusText = (status?: number) => {
 const fetchFavorites = async () => {
   loading.value = true
   try {
-    // 实际开发中调用 API
-    // const result = await getFavoriteList({
-    //   pageNum: currentPage.value,
-    //   pageSize: pageSize.value
-    // })
-    // products.value = result.list
-    // total.value = result.total
-    
-    // 模拟数据
-    await new Promise(resolve => setTimeout(resolve, 300))
-    products.value = mockProducts
-    total.value = mockProducts.length
+    const result = await getFavoriteList(currentPage.value, pageSize.value)
+    products.value = result.data.list || []
+    total.value = result.data.total || 0
   } catch (error) {
     console.error('获取收藏列表失败:', error)
     ElMessage.error('获取收藏列表失败')
+    products.value = []
+    total.value = 0
   } finally {
     loading.value = false
   }
