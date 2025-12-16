@@ -102,7 +102,52 @@ const routes: RouteRecordRaw[] = [
     path: '/admin',
     name: 'admin',
     component: AdminDashboard,
-    meta: { requiresAuth: true, requiresAdmin: true }
+    meta: { requiresAuth: true, requiresAdmin: true },
+    redirect: '/admin/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        name: 'adminDashboard',
+        component: () => import('../views/admin/Dashboard.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
+      },
+      {
+        path: 'users',
+        name: 'adminUsers',
+        component: () => import('../views/admin/UserManagement.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
+      },
+      {
+        path: 'products/review',
+        name: 'adminProductReview',
+        component: () => import('../views/admin/ProductReview.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
+      },
+      {
+        path: 'products',
+        name: 'adminProducts',
+        component: () => import('../views/admin/ProductManagement.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
+      },
+      {
+        path: 'orders',
+        name: 'adminOrders',
+        component: () => import('../views/admin/OrderManagement.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
+      },
+      {
+        path: 'categories',
+        name: 'adminCategories',
+        component: () => import('../views/admin/CategoryManagement.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
+      },
+      {
+        path: 'stats',
+        name: 'adminStats',
+        component: () => import('../views/admin/Statistics.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
+      }
+    ]
   },
   {
     path: '/:pathMatch(.*)*',
