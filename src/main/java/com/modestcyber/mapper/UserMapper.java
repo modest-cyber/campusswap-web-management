@@ -65,4 +65,22 @@ public interface UserMapper {
      */
     @Delete("DELETE FROM user WHERE id = #{id}")
     int deleteById(Long id);
+
+    /**
+     * 更新用户状态
+     */
+    @Update("UPDATE user SET status = #{status}, update_time = #{updateTime} WHERE id = #{id}")
+    int updateById(@Param("id") Long id, @Param("status") Integer status, @Param("updateTime") java.time.LocalDateTime updateTime);
+
+    /**
+     * 统计总用户数
+     */
+    @Select("SELECT COUNT(*) FROM user")
+    Long countTotal();
+
+    /**
+     * 统计时间范围内的用户数
+     */
+    @Select("SELECT COUNT(*) FROM user WHERE create_time BETWEEN #{start} AND #{end}")
+    Long countByTime(@Param("start") java.time.LocalDateTime start, @Param("end") java.time.LocalDateTime end);
 }

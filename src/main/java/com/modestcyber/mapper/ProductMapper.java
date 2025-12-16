@@ -100,4 +100,22 @@ public interface ProductMapper {
      */
     @Select("SELECT COUNT(*) FROM product WHERE user_id = #{userId}")
     Long countMyProducts(Long userId);
+
+    /**
+     * 统计总商品数
+     */
+    @Select("SELECT COUNT(*) FROM product")
+    Long countTotal();
+
+    /**
+     * 统计时间范围内的商品数
+     */
+    @Select("SELECT COUNT(*) FROM product WHERE create_time BETWEEN #{start} AND #{end}")
+    Long countByTime(@Param("start") java.time.LocalDateTime start, @Param("end") java.time.LocalDateTime end);
+
+    /**
+     * 统计在售商品数
+     */
+    @Select("SELECT COUNT(*) FROM product WHERE status = 1")
+    Long countOnSale();
 }

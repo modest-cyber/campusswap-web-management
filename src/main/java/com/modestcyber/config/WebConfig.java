@@ -1,5 +1,6 @@
 package com.modestcyber.config;
 
+import com.modestcyber.interceptor.AdminInterceptor;
 import com.modestcyber.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private JwtInterceptor jwtInterceptor;
 
+    @Autowired
+    private AdminInterceptor adminInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
@@ -28,6 +32,10 @@ public class WebConfig implements WebMvcConfigurer {
                         "/uploads/**",
                         "/error"
                 );
+        
+        // 管理员权限拦截器
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/api/admin/**");
     }
 
     @Override

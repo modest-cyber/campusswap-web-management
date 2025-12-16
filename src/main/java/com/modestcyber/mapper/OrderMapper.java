@@ -89,4 +89,28 @@ public interface OrderMapper {
      */
     @Select("SELECT COUNT(*) FROM `order` WHERE (buyer_id = #{userId} OR seller_id = #{userId}) AND status NOT IN (3, 4)")
     int countUnfinishedOrders(Long userId);
+
+    /**
+     * 统计总订单数
+     */
+    @Select("SELECT COUNT(*) FROM `order`")
+    Long countTotal();
+
+    /**
+     * 统计时间范围内的订单数
+     */
+    @Select("SELECT COUNT(*) FROM `order` WHERE create_time BETWEEN #{start} AND #{end}")
+    Long countByTime(@Param("start") java.time.LocalDateTime start, @Param("end") java.time.LocalDateTime end);
+
+    /**
+     * 统计总交易额
+     */
+    @Select("SELECT COALESCE(SUM(total_price), 0) FROM `order` WHERE status = 3")
+    java.math.BigDecimal sumTotalAmount();
+
+    /**
+     * 统计时间范围内的交易额
+     */
+    @Select("SELECT COALESCE(SUM(total_price), 0) FROM `order` WHERE status = 3 AND create_time BETWEEN #{start} AND #{end}")
+    java.math.BigDecimal sumAmountByTime(@Param("start") java.time.LocalDateTime start, @Param("end") java.time.LocalDateTime end);
 }
