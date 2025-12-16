@@ -8,6 +8,7 @@ import com.modestcyber.dto.request.UpdateUserInfoRequest;
 import com.modestcyber.dto.response.LoginResponse;
 import com.modestcyber.dto.response.UserInfoResponse;
 import com.modestcyber.exception.BusinessException;
+import com.modestcyber.mapper.OrderMapper;
 import com.modestcyber.mapper.UserMapper;
 import com.modestcyber.pojo.User;
 import com.modestcyber.util.JwtUtil;
@@ -38,6 +39,9 @@ public class UserService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private OrderMapper orderMapper;
 
     /**
      * 用户登录
@@ -231,8 +235,11 @@ public class UserService {
             throw new BusinessException("用户不存在");
         }
 
-        // 检查是否有未完成的订单（这里先预留，等订单模块开发后再实现）
-        // TODO: 检查未完成订单
+        // 检查是否有未完成的订单
+        int unfinishedCount = orderMapper.countUnfinishedOrders(userId);
+        if (unfinishedCount > 0) {
+            throw new BusinessException("存在未完成的订单，无法注销账号");
+        }
 
         // 删除用户
         userMapper.deleteById(userId);
