@@ -36,6 +36,9 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private FileService fileService;
+
     /**
      * 用户登录
      */
@@ -186,6 +189,54 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(request.getNewPassword());
         userMapper.updatePassword(userId, encodedPassword, LocalDateTime.now());
         log.info("用户 {} 修改密码成功", user.getUsername());
+    }
+
+    /**
+     * 上传头像
+     */
+    @Transactional
+    public String uploadAvatar(org.springframework.web.multipart.MultipartFile file) {
+        Long userId = UserContext.getUserId();
+        if (userId == null) {
+            throw new BusinessException(401, "请先登录");
+        }
+
+        User user = userMapper.findById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+
+        // 上传文件
+        String avatarUrl = fileService.uploadFile(file, "avatar");
+
+        // 更新头像
+        userMapper.updateAvatar(userId, avatarUrl, LocalDateTime.now());
+        log.info("用户 {} 更新头像成功", user.getUsername());
+
+        return avatarUrl;
+    }
+
+    /**
+     * 注销账号
+     */
+    @Transactional
+    public void deleteAccount() {
+        Long userId = UserContext.getUserId();
+        if (userId == null) {
+            throw new BusinessException(401, "请先登录");
+        }
+
+        User user = userMapper.findById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+
+        // 检查是否有未完成的订单（这里先预留，等订单模块开发后再实现）
+        // TODO: 检查未完成订单
+
+        // 删除用户
+        userMapper.deleteById(userId);
+        log.info("用户 {} 注销账号成功", user.getUsername());
     }
 
     /**

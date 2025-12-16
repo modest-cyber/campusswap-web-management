@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户控制器
@@ -66,6 +67,24 @@ public class UserController {
     @PutMapping("/password")
     public Result<Void> updatePassword(@Valid @RequestBody UpdatePasswordRequest request) {
         userService.updatePassword(request);
+        return Result.success();
+    }
+
+    /**
+     * 上传头像
+     */
+    @PostMapping("/avatar")
+    public Result<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        String avatarUrl = userService.uploadAvatar(file);
+        return Result.success(avatarUrl);
+    }
+
+    /**
+     * 注销账号
+     */
+    @DeleteMapping
+    public Result<Void> deleteAccount() {
+        userService.deleteAccount();
         return Result.success();
     }
 }
