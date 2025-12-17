@@ -15,7 +15,7 @@
         <el-radio-button value="1">在售</el-radio-button>
         <el-radio-button value="2">下架</el-radio-button>
         <el-radio-button value="3">已售出</el-radio-button>
-        <el-radio-button value="-1">审核拒绝</el-radio-button>
+        <el-radio-button value="4">审核拒绝</el-radio-button>
       </el-radio-group>
     </div>
     
@@ -167,7 +167,7 @@ const getStatusType = (status?: number) => {
     1: 'success',
     2: 'info',
     3: '',
-    '-1': 'danger'
+    4: 'danger'
   }
   return typeMap[status ?? 1]
 }
@@ -179,7 +179,7 @@ const getStatusText = (status?: number) => {
     1: '在售',
     2: '下架',
     3: '已售出',
-    '-1': '审核拒绝'
+    4: '审核拒绝'
   }
   return textMap[status ?? 1]
 }

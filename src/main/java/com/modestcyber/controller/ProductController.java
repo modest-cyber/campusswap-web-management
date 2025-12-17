@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 商品控制器
@@ -79,15 +80,18 @@ public class ProductController {
     @GetMapping("/list")
     public Result<PageResult<ProductResponse>> listProducts(
             @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) List<Long> categoryIds,
+            @RequestParam(required = false) List<String> quality,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) Integer status,
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false, defaultValue = "create_time") String sortBy,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder,
             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         PageResult<ProductResponse> result = productService.listProducts(
-                categoryId, minPrice, maxPrice, status, keyword, sortBy, pageNum, pageSize);
+                categoryId, categoryIds, quality, minPrice, maxPrice, status, keyword, sortBy, sortOrder, pageNum, pageSize);
         return Result.success(result);
     }
 

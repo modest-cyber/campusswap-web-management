@@ -120,8 +120,8 @@ const fetchFavorites = async () => {
   loading.value = true
   try {
     const result = await getFavoriteList(currentPage.value, pageSize.value)
-    products.value = result.data.list || []
-    total.value = result.data.total || 0
+    products.value = result.list || []
+    total.value = result.total || 0
   } catch (error) {
     console.error('获取收藏列表失败:', error)
     ElMessage.error('获取收藏列表失败')

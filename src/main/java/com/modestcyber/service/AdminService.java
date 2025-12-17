@@ -143,8 +143,8 @@ public class AdminService {
         }
 
         int offset = (pageNum - 1) * pageSize;
-        List<Product> products = productMapper.listProducts(categoryId, null, null, 0, keyword, "create_time", offset, pageSize);
-        Long total = productMapper.countProducts(categoryId, null, null, 0, keyword);
+        List<Product> products = productMapper.listProducts(categoryId, null, null, null, null, 0, keyword, "create_time", "desc", offset, pageSize);
+        Long total = productMapper.countProducts(categoryId, null, null, null, null, 0, keyword);
 
         List<ProductResponse> responseList = products.stream()
                 .map(this::convertToProductResponse)
@@ -165,8 +165,8 @@ public class AdminService {
         }
 
         int offset = (pageNum - 1) * pageSize;
-        List<Product> products = productMapper.listProducts(categoryId, null, null, status, keyword, "create_time", offset, pageSize);
-        Long total = productMapper.countProducts(categoryId, null, null, status, keyword);
+        List<Product> products = productMapper.listProducts(categoryId, null, null, null, null, status, keyword, "create_time", "desc", offset, pageSize);
+        Long total = productMapper.countProducts(categoryId, null, null, null, null, status, keyword);
 
         List<ProductResponse> responseList = products.stream()
                 .map(this::convertToProductResponse)
@@ -420,11 +420,22 @@ public class AdminService {
 
     public List<Category> getCategoryTree() {
         List<Category> allCategories = categoryMapper.findAll();
+        // 设置level和sort字段
+        for (Category category : allCategories) {
+            category.setLevel(category.getParentId() == 0 ? 1 : 2);
+            category.setSort(category.getSortOrder());
+        }
         return buildCategoryTree(allCategories, 0L);
     }
 
     public List<Category> getCategoryList() {
-        return categoryMapper.findAll();
+        List<Category> allCategories = categoryMapper.findAll();
+        // 设置level和sort字段
+        for (Category category : allCategories) {
+            category.setLevel(category.getParentId() == 0 ? 1 : 2);
+            category.setSort(category.getSortOrder());
+        }
+        return allCategories;
     }
 
     @Transactional
@@ -490,8 +501,15 @@ public class AdminService {
         for (LocalDate date = startD; !date.isAfter(endD); date = date.plusDays(1)) {
             Map<String, Object> dayStats = new HashMap<>();
             dayStats.put("date", date.toString());
-            dayStats.put("registerCount", 0); // 实际应查询数据库
-            dayStats.put("activeCount", 0);   // 实际应查询数据库
+            
+            // 查询当天注册用户数
+            LocalDateTime dayStart = date.atStartOfDay();
+            LocalDateTime dayEnd = date.plusDays(1).atStartOfDay();
+            Long registerCount = userMapper.countByTime(dayStart, dayEnd);
+            dayStats.put("registerCount", registerCount);
+            
+            // 活跃用户数暂时设为0（需要定义活跃的标准）
+            dayStats.put("activeCount", 0);
             stats.add(dayStats);
         }
         return stats;
@@ -526,7 +544,12 @@ public class AdminService {
         for (LocalDate date = startD; !date.isAfter(endD); date = date.plusDays(1)) {
             Map<String, Object> dayStats = new HashMap<>();
             dayStats.put("date", date.toString());
-            dayStats.put("publishCount", 0); // 实际应查询数据库
+            
+            // 查询当天发布的商品数
+            LocalDateTime dayStart = date.atStartOfDay();
+            LocalDateTime dayEnd = date.plusDays(1).atStartOfDay();
+            Long publishCount = productMapper.countByTime(dayStart, dayEnd);
+            dayStats.put("publishCount", publishCount);
             stats.add(dayStats);
         }
         return stats;
@@ -553,9 +576,21 @@ public class AdminService {
         for (LocalDate date = startD; !date.isAfter(endD); date = date.plusDays(1)) {
             Map<String, Object> dayStats = new HashMap<>();
             dayStats.put("date", date.toString());
-            dayStats.put("orderCount", 0);
-            dayStats.put("successCount", 0);
-            dayStats.put("totalAmount", 0);
+            
+            // 查询当天订单数据
+            LocalDateTime dayStart = date.atStartOfDay();
+            LocalDateTime dayEnd = date.plusDays(1).atStartOfDay();
+            Long orderCount = orderMapper.countByTime(dayStart, dayEnd);
+            
+            // 查询当天成功订单数（status=3为已完成）
+            Long successCount = orderMapper.countSuccessByTime(dayStart, dayEnd);
+            
+            // 查询当天成交额
+            java.math.BigDecimal totalAmount = orderMapper.sumAmountByTime(dayStart, dayEnd);
+            
+            dayStats.put("orderCount", orderCount);
+            dayStats.put("successCount", successCount);
+            dayStats.put("totalAmount", totalAmount != null ? totalAmount : java.math.BigDecimal.ZERO);
             stats.add(dayStats);
         }
         return stats;
@@ -590,7 +625,7 @@ public class AdminService {
     public List<Map<String, Object>> getHotProducts(String startDate, String endDate) {
         List<Map<String, Object>> products = new ArrayList<>();
         // 查询热门商品（按浏览量排序）
-        List<Product> allProducts = productMapper.listProducts(null, null, null, 1, null, "view_count", 0, 10);
+        List<Product> allProducts = productMapper.listProducts(null, null, null, null, null, 1, null, "view_count", "desc", 0, 10);
         for (Product product : allProducts) {
             Map<String, Object> map = new HashMap<>();
             map.put("name", product.getTitle());

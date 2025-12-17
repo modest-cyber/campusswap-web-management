@@ -31,11 +31,14 @@ export interface Product {
 export interface ProductQuery {
   keyword?: string
   categoryId?: number
+  categoryIds?: number[]
+  quality?: string[]
   minPrice?: number
   maxPrice?: number
   status?: number
   sort?: 'latest' | 'priceAsc' | 'priceDesc' | 'hot'
   sortBy?: string
+  sortOrder?: 'asc' | 'desc'
   pageNum?: number
   pageSize?: number
 }

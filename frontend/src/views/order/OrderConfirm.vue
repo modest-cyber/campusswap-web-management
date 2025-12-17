@@ -114,6 +114,7 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Product } from '../../api/product'
 import { getProductDetail } from '../../api/product'
+import { createOrder } from '../../api/order'
 
 const route = useRoute()
 const router = useRouter()
@@ -207,7 +208,7 @@ const loadProduct = async () => {
 
 // 提交订单
 const handleSubmit = async () => {
-  // 如果是邮寄，需要校验地址
+  // 如果是邮寄,需要校验地址
   if (form.transactionType === 2) {
     if (!addressFormRef.value) return
     
@@ -220,19 +221,19 @@ const handleSubmit = async () => {
   
   loading.value = true
   try {
-    // 实际开发中调用 API
-    // await createOrder({
-    //   productId: form.productId,
-    //   quantity: form.quantity,
-    //   transactionType: form.transactionType,
-    //   receiverName: form.transactionType === 2 ? form.address.receiverName : undefined,
-    //   receiverPhone: form.transactionType === 2 ? form.address.receiverPhone : undefined,
-    //   receiverAddress: form.transactionType === 2 ? form.address.receiverAddress : undefined,
-    //   remark: form.remark
-    // })
+    // 构造地址字符串
+    let addressStr = ''
+    if (form.transactionType === 2) {
+      addressStr = `${form.address.receiverName} ${form.address.receiverPhone} ${form.address.receiverAddress}`
+    }
     
-    // 模拟延迟
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await createOrder({
+      productId: form.productId,
+      quantity: form.quantity,
+      transactionType: form.transactionType === 1 ? 0 : 1, // 面交为0,邮寄为1
+      address: addressStr,
+      remark: form.remark
+    })
     
     ElMessage.success('订单提交成功')
     
@@ -240,7 +241,7 @@ const handleSubmit = async () => {
     router.push('/mine/orders')
   } catch (error) {
     console.error('提交订单失败:', error)
-    ElMessage.error('提交订单失败，请重试')
+    ElMessage.error('提交订单失败,请重试')
   } finally {
     loading.value = false
   }

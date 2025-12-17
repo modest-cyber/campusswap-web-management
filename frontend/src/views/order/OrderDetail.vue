@@ -86,7 +86,7 @@
         </div>
         
         <!-- 邮寄地址（如果是邮寄） -->
-        <div class="section" v-if="order.transactionType === 2 && order.address">
+        <div class="section" v-if="order.transactionType === 1 && order.address">
           <h3 class="section-title">邮寄信息</h3>
           <div class="info-grid">
             <div class="info-item">
@@ -132,7 +132,7 @@
           <template v-else>
             <!-- 卖家操作 -->
             <el-button v-if="order.status === 1" type="primary" @click="handleDeliver">
-              {{ order.transactionType === 1 ? '确认面交' : '发货' }}
+              {{ order.transactionType === 0 ? '确认面交' : '发货' }}
             </el-button>
           </template>
         </div>
@@ -146,9 +146,12 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { SuccessFilled, WarningFilled, InfoFilled, CircleCheckFilled } from '@element-plus/icons-vue'
+import { getOrderDetail, cancelOrder, confirmReceive, deliverOrder } from '../../api/order'
+import { useAuthStore } from '../../store/auth'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 interface OrderAddress {
   receiverName: string
@@ -194,12 +197,15 @@ const order = ref<Order | null>(null)
 // 加载状态
 const loading = ref(false)
 
-// 当前用户ID（模拟）
-const currentUserId = ref(2)
+// 当前用户ID
+const currentUserId = computed(() => authStore.userInfo?.id)
 
 // 是否为买家
 const isCurrentUserBuyer = computed(() => {
-  return order.value?.buyerId === currentUserId.value
+  if (!order.value || !currentUserId.value) return false
+  const isBuyer = order.value.buyerId === currentUserId.value
+  console.log('订单详情 - 当前用户ID:', currentUserId.value, '买家ID:', order.value.buyerId, '卖家ID:', order.value.sellerId, '是买家:', isBuyer)
+  return isBuyer
 })
 
 // 获取状态文本
@@ -253,9 +259,9 @@ const getStatusColor = (status: number) => {
 // 获取交易方式名称
 const getTransactionTypeName = (type: number) => {
   const typeMap: Record<number, string> = {
-    1: '面交',
-    2: '邮寄',
-    3: '均可'
+    0: '面交',
+    1: '邮寄',
+    2: '均可'
   }
   return typeMap[type] || '未知'
 }
@@ -264,43 +270,23 @@ const getTransactionTypeName = (type: number) => {
 const loadOrderDetail = async () => {
   loading.value = true
   try {
-    // 实际开发中调用 API
-    // const data = await getOrderDetail(orderId.value)
-    // order.value = data
+    const data: any = await getOrderDetail(orderId.value)
     
-    // 模拟数据
-    await new Promise(resolve => setTimeout(resolve, 300))
-    order.value = {
-      id: 1,
-      orderNo: 'ORD20240115001',
-      productId: 1,
-      productTitle: 'iPhone 13 Pro',
-      productImage: 'https://via.placeholder.com/100x100?text=iPhone13Pro',
-      categoryName: '数码产品',
-      condition: '99成新',
-      buyerId: 2,
-      buyerName: '李四',
-      sellerId: 1,
-      sellerName: '张三',
-      quantity: 1,
-      totalAmount: 5999,
-      transactionType: 2,
-      status: 2,
-      address: {
-        receiverName: '李四',
-        receiverPhone: '13800138001',
-        receiverAddress: '陕西省西安市雁塔区电子城街道科技路10号'
-      },
-      trackingNumber: 'SF1234567890',
-      remark: '请尽快发货，谢谢！',
-      hasReviewed: false,
-      createdAt: '2024-01-15 10:30:00',
-      timeline: [
-        { time: '2024-01-15 10:30:00', content: '订单创建成功' },
-        { time: '2024-01-15 10:35:00', content: '卖家已确认订单' },
-        { time: '2024-01-15 14:20:00', content: '卖家已发货' }
-      ]
+    // 处理地址信息
+    if (data.address && typeof data.address === 'string') {
+      // 解析地址字符串 "姓名 电话 地址"
+      const addressStr = data.address as string
+      const parts = addressStr.split(' ')
+      if (parts.length >= 3) {
+        data.address = {
+          receiverName: parts[0],
+          receiverPhone: parts[1],
+          receiverAddress: parts.slice(2).join(' ')
+        }
+      }
     }
+    
+    order.value = data
   } catch (error) {
     console.error('加载订单详情失败:', error)
     ElMessage.error('加载订单详情失败')
@@ -312,38 +298,40 @@ const loadOrderDetail = async () => {
 // 取消订单
 const handleCancel = async () => {
   try {
-    await ElMessageBox.confirm('确认要取消该订单吗？', '提示', {
+    await ElMessageBox.confirm('确认要取消该订单吗?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     })
     
-    // 实际开发中调用 API
-    // await cancelOrder(orderId.value)
+    await cancelOrder(orderId.value)
     
     ElMessage.success('订单已取消')
     router.push('/mine/orders')
-  } catch (error) {
-    // 用户取消操作
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error('取消订单失败')
+    }
   }
 }
 
 // 确认收货
 const handleConfirmReceive = async () => {
   try {
-    await ElMessageBox.confirm('确认已收到商品吗？', '提示', {
+    await ElMessageBox.confirm('确认已收到商品吗?', '提示', {
       confirmButtonText: '确认收货',
       cancelButtonText: '取消',
       type: 'success'
     })
     
-    // 实际开发中调用 API
-    // await confirmReceive(orderId.value)
+    await confirmReceive(orderId.value)
     
     ElMessage.success('确认收货成功')
     loadOrderDetail()
-  } catch (error) {
-    // 用户取消操作
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error('确认收货失败')
+    }
   }
 }
 
@@ -351,22 +339,23 @@ const handleConfirmReceive = async () => {
 const handleDeliver = async () => {
   if (!order.value) return
   
-  const action = order.value.transactionType === 1 ? '确认面交' : '发货'
+  const action = order.value.transactionType === 0 ? '确认面交' : '发货'
   
   try {
-    await ElMessageBox.confirm(`确认要${action}吗？`, '提示', {
+    await ElMessageBox.confirm(`确认要${action}吗?`, '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     })
     
-    // 实际开发中调用 API
-    // await deliverOrder(orderId.value)
+    await deliverOrder(orderId.value)
     
     ElMessage.success(`${action}成功`)
     loadOrderDetail()
-  } catch (error) {
-    // 用户取消操作
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error(`${action}失败`)
+    }
   }
 }
 

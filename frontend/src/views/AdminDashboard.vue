@@ -2,6 +2,11 @@
   <div class="admin-layout">
     <el-container>
       <el-aside width="200px">
+        <!-- 校徽和校名 -->
+        <div class="school-header">
+          <img src="../img/校徽.png" alt="西安石油大学" class="school-logo" />
+          <span class="school-name">西安石油大学</span>
+        </div>
         <el-menu
           :default-active="currentRoute"
           class="admin-menu"
@@ -90,6 +95,9 @@ const handleLogout = async () => {
 .admin-layout {
   height: 100vh;
   width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .el-container {
@@ -100,6 +108,28 @@ const handleLogout = async () => {
 .el-aside {
   background-color: #304156;
   height: 100%;
+}
+
+.school-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 10px;
+  background-color: #304156;
+  border-bottom: 1px solid #263445;
+}
+
+.school-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.school-name {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .admin-menu {

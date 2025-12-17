@@ -191,16 +191,18 @@ public class ProductService {
     /**
      * 商品列表
      */
-    public PageResult<ProductResponse> listProducts(Long categoryId, BigDecimal minPrice, BigDecimal maxPrice,
-                                                     Integer status, String keyword, String sortBy,
+    public PageResult<ProductResponse> listProducts(Long categoryId, List<Long> categoryIds, List<String> quality,
+                                                     BigDecimal minPrice, BigDecimal maxPrice,
+                                                     Integer status, String keyword, String sortBy, String sortOrder,
                                                      Integer pageNum, Integer pageSize) {
         if (pageNum == null || pageNum < 1) pageNum = 1;
         if (pageSize == null || pageSize < 1) pageSize = 10;
 
         int offset = (pageNum - 1) * pageSize;
 
-        List<Product> products = productMapper.listProducts(categoryId, minPrice, maxPrice, status, keyword, sortBy, offset, pageSize);
-        Long total = productMapper.countProducts(categoryId, minPrice, maxPrice, status, keyword);
+        List<Product> products = productMapper.listProducts(categoryId, categoryIds, quality, minPrice, maxPrice, 
+                                                            status, keyword, sortBy, sortOrder, offset, pageSize);
+        Long total = productMapper.countProducts(categoryId, categoryIds, quality, minPrice, maxPrice, status, keyword);
 
         List<ProductResponse> responseList = products.stream()
                 .map(this::convertToProductResponse)

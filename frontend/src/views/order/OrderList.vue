@@ -7,9 +7,10 @@
     <!-- 视角切换 -->
     <div class="view-tabs">
       <el-radio-group v-model="viewType" @change="handleViewChange">
-        <el-radio-button value="buyer">买家订单</el-radio-button>
-        <el-radio-button value="seller">卖家订单</el-radio-button>
+        <el-radio-button label="buyer">买家订单</el-radio-button>
+        <el-radio-button label="seller">卖家订单</el-radio-button>
       </el-radio-group>
+      <span style="margin-left: 20px; color: #999;">当前viewType: {{ viewType }}</span>
     </div>
     
     <!-- 筛选栏 -->
@@ -116,7 +117,7 @@
                 size="small" 
                 @click="handleDeliver(order)"
               >
-                {{ order.transactionType === 1 ? '确认面交' : '发货' }}
+                {{ order.transactionType === 0 ? '确认面交' : '发货' }}
               </el-button>
             </template>
             
@@ -146,7 +147,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-import { getOrderList } from '../../api/order'
+import { getOrderList, cancelOrder, confirmReceive, deliverOrder } from '../../api/order'
 
 const router = useRouter()
 
@@ -217,9 +218,9 @@ const getStatusText = (status: number) => {
 // 获取交易方式名称
 const getTransactionTypeName = (type: number) => {
   const typeMap: Record<number, string> = {
-    1: '面交',
-    2: '邮寄',
-    3: '均可'
+    0: '面交',
+    1: '邮寄',
+    2: '均可'
   }
   return typeMap[type] || '未知'
 }
@@ -237,8 +238,15 @@ const fetchOrders = async () => {
       pageNum: currentPage.value,
       pageSize: pageSize.value
     })
-    orders.value = result.data.list || []
-    total.value = result.data.total || 0
+    orders.value = result.list || []
+    total.value = result.total || 0
+    
+    // 调试日志
+    console.log('订单列表 - 视角类型:', viewType.value)
+    console.log('订单列表 - 订单数据:', orders.value)
+    if (orders.value.length > 0 && orders.value[0]) {
+      console.log('第一条订单 - 买家:', orders.value[0].buyerName, '卖家:', orders.value[0].sellerName)
+    }
   } catch (error) {
     console.error('获取订单列表失败:', error)
     ElMessage.error('获取订单列表失败')
@@ -289,59 +297,62 @@ const handleCurrentPageChange = (page: number) => {
 // 取消订单
 const handleCancel = async (order: Order) => {
   try {
-    await ElMessageBox.confirm('确认要取消该订单吗？', '提示', {
+    await ElMessageBox.confirm('确认要取消该订单吗?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     })
     
-    // 实际开发中调用 API
-    // await cancelOrder(order.id)
+    await cancelOrder(order.id)
     
     ElMessage.success('订单已取消')
     fetchOrders()
-  } catch (error) {
-    // 用户取消操作
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error('取消订单失败')
+    }
   }
 }
 
 // 确认收货
 const handleConfirmReceive = async (order: Order) => {
   try {
-    await ElMessageBox.confirm('确认已收到商品吗？', '提示', {
+    await ElMessageBox.confirm('确认已收到商品吗?', '提示', {
       confirmButtonText: '确认收货',
       cancelButtonText: '取消',
       type: 'success'
     })
     
-    // 实际开发中调用 API
-    // await confirmReceive(order.id)
+    await confirmReceive(order.id)
     
     ElMessage.success('确认收货成功')
     fetchOrders()
-  } catch (error) {
-    // 用户取消操作
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error('确认收货失败')
+    }
   }
 }
 
 // 发货/确认面交
 const handleDeliver = async (order: Order) => {
-  const action = order.transactionType === 1 ? '确认面交' : '发货'
+  const action = order.transactionType === 0 ? '确认面交' : '发货'
   
   try {
-    await ElMessageBox.confirm(`确认要${action}吗？`, '提示', {
+    await ElMessageBox.confirm(`确认要${action}吗?`, '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     })
     
-    // 实际开发中调用 API
-    // await deliverOrder(order.id)
+    await deliverOrder(order.id)
     
     ElMessage.success(`${action}成功`)
     fetchOrders()
-  } catch (error) {
-    // 用户取消操作
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      ElMessage.error(`${action}失败`)
+    }
   }
 }
 

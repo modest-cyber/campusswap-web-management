@@ -17,6 +17,8 @@ public class Category {
     private Long id;
     private String name;
     private Long parentId;
+    private Integer level;
+    private Integer sort;
     private Integer sortOrder;
     private Integer status;
     private LocalDateTime createTime;

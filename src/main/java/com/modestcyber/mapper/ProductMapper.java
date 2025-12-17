@@ -71,11 +71,14 @@ public interface ProductMapper {
      */
     @SelectProvider(type = ProductSqlProvider.class, method = "listProducts")
     List<Product> listProducts(@Param("categoryId") Long categoryId,
+                               @Param("categoryIds") List<Long> categoryIds,
+                               @Param("quality") List<String> quality,
                                @Param("minPrice") java.math.BigDecimal minPrice,
                                @Param("maxPrice") java.math.BigDecimal maxPrice,
                                @Param("status") Integer status,
                                @Param("keyword") String keyword,
                                @Param("sortBy") String sortBy,
+                               @Param("sortOrder") String sortOrder,
                                @Param("offset") Integer offset,
                                @Param("limit") Integer limit);
 
@@ -84,6 +87,8 @@ public interface ProductMapper {
      */
     @SelectProvider(type = ProductSqlProvider.class, method = "countProducts")
     Long countProducts(@Param("categoryId") Long categoryId,
+                       @Param("categoryIds") List<Long> categoryIds,
+                       @Param("quality") List<String> quality,
                        @Param("minPrice") java.math.BigDecimal minPrice,
                        @Param("maxPrice") java.math.BigDecimal maxPrice,
                        @Param("status") Integer status,

@@ -113,4 +113,10 @@ public interface OrderMapper {
      */
     @Select("SELECT COALESCE(SUM(total_price), 0) FROM `order` WHERE status = 3 AND create_time BETWEEN #{start} AND #{end}")
     java.math.BigDecimal sumAmountByTime(@Param("start") java.time.LocalDateTime start, @Param("end") java.time.LocalDateTime end);
+
+    /**
+     * 统计时间范围内成功的订单数
+     */
+    @Select("SELECT COUNT(*) FROM `order` WHERE status = 3 AND create_time BETWEEN #{start} AND #{end}")
+    Long countSuccessByTime(@Param("start") java.time.LocalDateTime start, @Param("end") java.time.LocalDateTime end);
 }

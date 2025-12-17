@@ -1,8 +1,10 @@
 package com.modestcyber.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.modestcyber.interceptor.AdminInterceptor;
 import com.modestcyber.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -52,5 +54,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:C:/Users/Asus/java_projects/Test/campusswap-web-management/uploads/");
+    }
+    
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

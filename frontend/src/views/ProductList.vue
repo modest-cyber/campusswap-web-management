@@ -46,6 +46,7 @@
               :step="100" 
               placeholder="最低价"
               @change="handleFilterChange"
+              style="width: 100%"
             />
             <span class="price-separator">-</span>
             <el-input-number 
@@ -54,6 +55,7 @@
               :step="100" 
               placeholder="最高价"
               @change="handleFilterChange"
+              style="width: 100%"
             />
           </div>
         </div>
@@ -161,14 +163,34 @@ const keyword = ref('')
 // 获取商品列表
 const fetchProducts = async () => {
   try {
+    // 构建排序参数
+    let sortBy_param: string | undefined
+    let sortOrder: 'asc' | 'desc' | undefined
+    
+    if (sortBy.value === 'latest') {
+      sortBy_param = 'create_time'
+      sortOrder = 'desc'
+    } else if (sortBy.value === 'priceAsc') {
+      sortBy_param = 'price'
+      sortOrder = 'asc'
+    } else if (sortBy.value === 'priceDesc') {
+      sortBy_param = 'price'
+      sortOrder = 'desc'
+    } else if (sortBy.value === 'hot') {
+      sortBy_param = 'view_count'
+      sortOrder = 'desc'
+    }
+    
     // 调用API获取商品列表，只显示在售状态的商品
     const result = await listProducts({
       keyword: keyword.value,
-      categoryId: selectedCategories.value.length > 0 ? selectedCategories.value[0] : undefined,
+      categoryIds: selectedCategories.value.length > 0 ? selectedCategories.value : undefined,
+      quality: selectedConditions.value.length > 0 ? selectedConditions.value : undefined,
       minPrice: priceRange.value.min,
       maxPrice: priceRange.value.max,
       status: 1,  // 只显示在售商品
-      sort: sortBy.value,
+      sortBy: sortBy_param,
+      sortOrder: sortOrder,
       pageNum: currentPage.value,
       pageSize: pageSize.value
     })
