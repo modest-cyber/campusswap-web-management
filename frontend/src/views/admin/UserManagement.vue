@@ -45,7 +45,7 @@
         <el-table-column prop="email" label="邮箱" min-width="180" />
         <el-table-column label="角色" width="100">
           <template #default="{ row }">
-            <el-tag v-if="row.role === 1" type="danger">管理员</el-tag>
+            <el-tag v-if="row.role === 'admin'" type="danger">管理员</el-tag>
             <el-tag v-else type="success">普通用户</el-tag>
           </template>
         </el-table-column>
@@ -66,7 +66,7 @@
               :type="row.status === 1 ? 'danger' : 'success'"
               size="small"
               @click="handleToggleStatus(row)"
-              :disabled="row.role === 1"
+              :disabled="row.role === 'admin'"
             >
               {{ row.status === 1 ? '禁用' : '启用' }}
             </el-button>
@@ -100,7 +100,7 @@
         <el-descriptions-item label="手机号">{{ currentUser.phone || '-' }}</el-descriptions-item>
         <el-descriptions-item label="邮箱">{{ currentUser.email || '-' }}</el-descriptions-item>
         <el-descriptions-item label="角色">
-          <el-tag v-if="currentUser.role === 1" type="danger">管理员</el-tag>
+          <el-tag v-if="currentUser.role === 'admin'" type="danger">管理员</el-tag>
           <el-tag v-else type="success">普通用户</el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="状态">
@@ -136,8 +136,8 @@ const loadUserList = async () => {
   loading.value = true
   try {
     const res = await getUserList(queryParams)
-    userList.value = res.list
-    total.value = res.total
+    userList.value = res.data.list
+    total.value = res.data.total
   } catch (error) {
     ElMessage.error('加载用户列表失败')
   } finally {

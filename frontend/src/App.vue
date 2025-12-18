@@ -4,11 +4,10 @@
     <header class="header" v-if="!isAdminRoute">
       <div class="container">
         <div class="header-left">
-          <router-link to="/" class="logo">西安石油大学二手交易平台</router-link>
-          <nav class="nav">
-            <router-link to="/" class="nav-item">首页</router-link>
-            <router-link to="/products" class="nav-item">商品分类</router-link>
-          </nav>
+          <router-link to="/" class="logo">
+            <img src="./img/校徽.png" alt="校徽" class="logo-img" />
+            <span>西安石油大学二手交易平台</span>
+          </router-link>
         </div>
         
         <!-- 全局搜索 -->
@@ -131,10 +130,19 @@ const goToPublish = () => {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 20px;
   font-weight: bold;
   color: #67c23a;
   text-decoration: none;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .nav {

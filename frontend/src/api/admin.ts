@@ -18,7 +18,7 @@ export interface AdminUser {
   email?: string
   phone?: string
   department?: string
-  role: number
+  role: string
   status: number
   createdAt: string
 }

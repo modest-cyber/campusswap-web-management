@@ -112,33 +112,6 @@
           <el-col :span="12">
             <el-card>
               <template #header>
-                <span>交易方式分布</span>
-              </template>
-              <div class="chart-container" ref="tradeMethodChart"></div>
-            </el-card>
-          </el-col>
-          <el-col :span="12">
-            <el-card>
-              <template #header>
-                <span>交易方式统计</span>
-              </template>
-              <el-table :data="tradeMethodStats" style="width: 100%">
-                <el-table-column prop="method" label="交易方式" />
-                <el-table-column prop="count" label="订单数" />
-                <el-table-column label="占比">
-                  <template #default="{ row }">
-                    {{ row.percentage }}%
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-card>
-          </el-col>
-        </el-row>
-        
-        <el-row :gutter="20" style="margin-top: 20px">
-          <el-col :span="12">
-            <el-card>
-              <template #header>
                 <span>买家排行榜</span>
               </template>
               <el-table :data="buyerRank" style="width: 100%" max-height="400">
@@ -186,7 +159,6 @@ import {
   getProductStats,
   getCategoryDistribution,
   getTradeStats,
-  getTradeMethodStats,
   getBuyerRank,
   getSellerRank,
   getHotProducts,
@@ -195,7 +167,6 @@ import {
   type ProductStats,
   type CategoryDistribution,
   type TradeStats,
-  type TradeMethodStats,
   type RankItem
 } from '../../api/admin'
 
@@ -205,7 +176,6 @@ const departmentChart = ref<HTMLElement>()
 const productTrendChart = ref<HTMLElement>()
 const categoryChart = ref<HTMLElement>()
 const tradeTrendChart = ref<HTMLElement>()
-const tradeMethodChart = ref<HTMLElement>()
 
 const dateRange = reactive({
   dates: [] as string[],
@@ -214,7 +184,6 @@ const dateRange = reactive({
 })
 
 const departmentStats = ref<DepartmentStats[]>([])
-const tradeMethodStats = ref<TradeMethodStats[]>([])
 const buyerRank = ref<RankItem[]>([])
 const sellerRank = ref<RankItem[]>([])
 const hotProducts = ref<any[]>([])
@@ -224,7 +193,6 @@ let deptChart: echarts.ECharts | null = null
 let productChart: echarts.ECharts | null = null
 let catChart: echarts.ECharts | null = null
 let tradeChart: echarts.ECharts | null = null
-let methodChart: echarts.ECharts | null = null
 
 const handleDateChange = (dates: string[]) => {
   if (dates && dates.length === 2) {
@@ -409,50 +377,6 @@ const loadTradeStats = async () => {
       })
     }
     
-    const methodData = await getTradeMethodStats({
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate
-    })
-    tradeMethodStats.value = methodData
-    
-    await nextTick()
-    if (tradeMethodChart.value) {
-      if (!methodChart) {
-        methodChart = echarts.init(tradeMethodChart.value)
-      }
-      
-      const chartData = methodData.map((d: TradeMethodStats) => ({ name: d.method, value: d.count }))
-      
-      methodChart.setOption({
-        tooltip: {
-          trigger: 'item',
-          formatter: '{b}: {c} ({d}%)'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-          data: chartData.map(d => d.name)
-        },
-        series: [{
-          type: 'pie',
-          radius: ['40%', '70%'],
-          center: ['60%', '50%'],
-          data: chartData,
-          label: {
-            show: true,
-            formatter: '{b}: {d}%'
-          },
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }]
-      })
-    }
-    
     buyerRank.value = await getBuyerRank({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate
@@ -483,7 +407,6 @@ const handleTabChange = () => {
     productChart?.resize()
     catChart?.resize()
     tradeChart?.resize()
-    methodChart?.resize()
   }, 100)
 }
 
@@ -496,7 +419,6 @@ onMounted(() => {
     productChart?.resize()
     catChart?.resize()
     tradeChart?.resize()
-    methodChart?.resize()
   })
 })
 </script>
