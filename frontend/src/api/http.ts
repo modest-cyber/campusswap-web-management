@@ -28,7 +28,8 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const res = response.data
-    if (res.code === 0) {
+    // 后端成功状态码是200
+    if (res.code === 200 || res.code === 0) {
       return res.data as any
     }
 
@@ -57,7 +58,7 @@ service.interceptors.response.use(
 )
 
 export function request<T = any>(config: AxiosRequestConfig): Promise<T> {
-  return service.request<ApiResponse<T>>(config).then(res => res as unknown as T)
+  return service.request<any, T>(config)
 }
 
 export default service

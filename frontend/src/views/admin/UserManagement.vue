@@ -136,8 +136,8 @@ const loadUserList = async () => {
   loading.value = true
   try {
     const res = await getUserList(queryParams)
-    userList.value = res.data.list
-    total.value = res.data.total
+    userList.value = res.list
+    total.value = res.total
   } catch (error) {
     ElMessage.error('加载用户列表失败')
   } finally {
