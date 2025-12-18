@@ -328,12 +328,24 @@
             
             <div class="params-section">
                 <h4>请求参数</h4>
-                <pre>{\n  "username": "string", // 用户名\n  "password": "string", // 密码\n  "realName": "string", // 真实姓名\n  "email": "string", // 邮箱\n  "phone": "string", // 电话\n  "studentId": "string", // 学号\n  "department": "string" // 学院\n}</pre>
+                <pre>{
+  "username": "string", // 用户名
+  "password": "string", // 密码
+  "realName": "string", // 真实姓名
+  "email": "string", // 邮箱
+  "phone": "string", // 电话
+  "studentId": "string", // 学号
+  "department": "string" // 学院
+}</pre>
             </div>
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": null\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": null
+}</pre>
             </div>
         </div>
         
@@ -346,12 +358,31 @@
             
             <div class="params-section">
                 <h4>请求参数</h4>
-                <pre>{\n  "account": "string", // 用户名或邮箱或电话\n  "password": "string" // 密码\n}</pre>
+                <pre>{
+  "account": "string", // 用户名或邮箱或电话
+  "password": "string" // 密码
+}</pre>
             </div>
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {\n    "token": "string", // JWT token\n    "userInfo": {\n      "id": 1,\n      "username": "string",\n      "role": "user", // 角色：user或admin\n      "realName": "string",\n      "email": "string",\n      "phone": "string",\n      "department": "string",\n      "avatar": "string"\n    }\n  }\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "token": "string", // JWT token
+    "userInfo": {
+      "id": 1,
+      "username": "string",
+      "role": "user", // 角色：user或admin
+      "realName": "string",
+      "email": "string",
+      "phone": "string",
+      "department": "string",
+      "avatar": "string"
+    }
+  }
+}</pre>
             </div>
         </div>
         
@@ -370,7 +401,20 @@
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {\n    "id": 1,\n    "username": "string",\n    "role": "user",\n    "realName": "string",\n    "email": "string",\n    "phone": "string",\n    "department": "string",\n    "avatar": "string"\n  }\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "id": 1,
+    "username": "string",
+    "role": "user",
+    "realName": "string",
+    "email": "string",
+    "phone": "string",
+    "department": "string",
+    "avatar": "string"
+  }
+}</pre>
             </div>
         </div>
         
@@ -386,7 +430,24 @@
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": [\n    {\n      "id": 1,\n      "name": "电子产品",\n      "parentId": 0,\n      "status": 1\n    },\n    {\n      "id": 2,\n      "name": "手机",\n      "parentId": 1,\n      "status": 1\n    }\n  ]\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": [
+    {
+      "id": 1,
+      "name": "电子产品",
+      "parentId": 0,
+      "status": 1
+    },
+    {
+      "id": 2,
+      "name": "手机",
+      "parentId": 1,
+      "status": 1
+    }
+  ]
+}</pre>
             </div>
         </div>
         
@@ -413,7 +474,37 @@
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {\n    "list": [\n      {\n        "id": 1,\n        "title": "iPhone 13",\n        "description": "9成新，无磕碰",\n        "price": 4500,\n        "originalPrice": 6999,\n        "images": ["url1", "url2"],\n        "status": 1,\n        "condition": "9成新",\n        "transactionType": 2,\n        "viewCount": 100,\n        "favoriteCount": 10,\n        "categoryId": 2,\n        "categoryName": "手机",\n        "sellerName": "张三",\n        "sellerDepartment": "计算机学院",\n        "sellerAvatar": "url",\n        "createdAt": "2023-01-01 10:00:00",\n        "isFavorite": false\n      }\n    ],\n    "total": 1,\n    "pageNum": 1,\n    "pageSize": 10\n  }\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "title": "iPhone 13",
+        "description": "9成新，无磕碰",
+        "price": 4500,
+        "originalPrice": 6999,
+        "images": ["url1", "url2"],
+        "status": 1,
+        "condition": "9成新",
+        "transactionType": 2,
+        "viewCount": 100,
+        "favoriteCount": 10,
+        "categoryId": 2,
+        "categoryName": "手机",
+        "sellerName": "张三",
+        "sellerDepartment": "计算机学院",
+        "sellerAvatar": "url",
+        "createdAt": "2023-01-01 10:00:00",
+        "isFavorite": false
+      }
+    ],
+    "total": 1,
+    "pageNum": 1,
+    "pageSize": 10
+  }
+}</pre>
             </div>
         </div>
         
@@ -432,7 +523,31 @@
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {\n    "id": 1,\n    "title": "iPhone 13",\n    "description": "9成新，无磕碰",\n    "price": 4500,\n    "originalPrice": 6999,\n    "images": ["url1", "url2"],\n    "status": 1,\n    "condition": "9成新",\n    "transactionType": 2,\n    "viewCount": 100,\n    "favoriteCount": 10,\n    "categoryId": 2,\n    "categoryName": "手机",\n    "sellerId": 1,\n    "sellerName": "张三",\n    "sellerDepartment": "计算机学院",\n    "sellerAvatar": "url",\n    "createdAt": "2023-01-01 10:00:00",\n    "isFavorite": false\n  }\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "id": 1,
+    "title": "iPhone 13",
+    "description": "9成新，无磕碰",
+    "price": 4500,
+    "originalPrice": 6999,
+    "images": ["url1", "url2"],
+    "status": 1,
+    "condition": "9成新",
+    "transactionType": 2,
+    "viewCount": 100,
+    "favoriteCount": 10,
+    "categoryId": 2,
+    "categoryName": "手机",
+    "sellerId": 1,
+    "sellerName": "张三",
+    "sellerDepartment": "计算机学院",
+    "sellerAvatar": "url",
+    "createdAt": "2023-01-01 10:00:00",
+    "isFavorite": false
+  }
+}</pre>
             </div>
         </div>
         
@@ -451,12 +566,25 @@
             
             <div class="params-section">
                 <h4>请求参数</h4>
-                <pre>{\n  "title": "string",\n  "description": "string",\n  "price": 0,\n  "originalPrice": 0,\n  "images": ["string"],\n  "categoryId": 0,\n  "condition": "string",\n  "transactionType": 0\n}</pre>
+                <pre>{
+  "title": "string",
+  "description": "string",
+  "price": 0,
+  "originalPrice": 0,
+  "images": ["string"],
+  "categoryId": 0,
+  "condition": "string",
+  "transactionType": 0
+}</pre>
             </div>
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": 1 // 商品ID\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": 1 // 商品ID
+}</pre>
             </div>
         </div>
         
@@ -484,7 +612,11 @@
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": null\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": null
+}</pre>
             </div>
         </div>
         
@@ -506,12 +638,35 @@
             
             <div class="params-section">
                 <h4>请求参数</h4>
-                <pre>{\n  "productId": 0,\n  "quantity": 1,\n  "transactionType": 0,\n  "receiverName": "string",\n  "receiverPhone": "string",\n  "receiverAddress": "string",\n  "remark": "string"\n}</pre>
+                <pre>{
+  "productId": 0,
+  "quantity": 1,
+  "transactionType": 0,
+  "receiverName": "string",
+  "receiverPhone": "string",
+  "receiverAddress": "string",
+  "remark": "string"
+}</pre>
             </div>
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {\n    "id": 1,\n    "orderNo": "string",\n    "productId": 1,\n    "productTitle": "string",\n    "productImage": "string",\n    "quantity": 1,\n    "totalAmount": 4500,\n    "transactionType": 2,\n    "status": 0,\n    "createdAt": "string"\n  }\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "id": 1,
+    "orderNo": "string",
+    "productId": 1,
+    "productTitle": "string",
+    "productImage": "string",
+    "quantity": 1,
+    "totalAmount": 4500,
+    "transactionType": 2,
+    "status": 0,
+    "createdAt": "string"
+  }
+}</pre>
             </div>
         </div>
         
@@ -543,7 +698,33 @@
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {\n    "list": [\n      {\n        "id": 1,\n        "orderNo": "string",\n        "productId": 1,\n        "productTitle": "string",\n        "productImage": "string",\n        "quantity": 1,\n        "totalAmount": 4500,\n        "transactionType": 2,\n        "status": 0,\n        "buyerId": 2,\n        "buyerName": "string",\n        "sellerId": 1,\n        "sellerName": "string",\n        "createdAt": "string"\n      }\n    ],\n    "total": 1,\n    "pageNum": 1,\n    "pageSize": 10\n  }\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "orderNo": "string",
+        "productId": 1,
+        "productTitle": "string",
+        "productImage": "string",
+        "quantity": 1,
+        "totalAmount": 4500,
+        "transactionType": 2,
+        "status": 0,
+        "buyerId": 2,
+        "buyerName": "string",
+        "sellerId": 1,
+        "sellerName": "string",
+        "createdAt": "string"
+      }
+    ],
+    "total": 1,
+    "pageNum": 1,
+    "pageSize": 10
+  }
+}</pre>
             </div>
         </div>
         
@@ -565,12 +746,20 @@
             
             <div class="params-section">
                 <h4>请求参数</h4>
-                <pre>{\n  "orderId": 0,\n  "rating": 5,\n  "comment": "string"\n}</pre>
+                <pre>{
+  "orderId": 0,
+  "rating": 5,
+  "comment": "string"
+}</pre>
             </div>
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": null\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": null
+}</pre>
             </div>
         </div>
         
@@ -599,7 +788,13 @@
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {\n    "url": "string" // 上传后的文件URL\n  }\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "url": "string" // 上传后的文件URL
+  }
+}</pre>
             </div>
         </div>
         
@@ -621,12 +816,20 @@
             
             <div class="params-section">
                 <h4>请求参数</h4>
-                <pre>{\n  "id": 0,\n  "status": 1,\n  "remark": "string"\n}</pre>
+                <pre>{
+  "id": 0,
+  "status": 1,
+  "remark": "string"
+}</pre>
             </div>
             
             <div class="response-format">
                 <h4>返回结果</h4>
-                <pre>{\n  "code": 200,\n  "message": "success",\n  "data": null\n}</pre>
+                <pre>{
+  "code": 200,
+  "message": "success",
+  "data": null
+}</pre>
             </div>
         </div>
         
@@ -635,12 +838,20 @@
         
         <div class="api-section">
             <h3>7.1 成功响应</h3>
-            <pre>{\n  "code": 200,\n  "message": "success",\n  "data": {}\n}</pre>
+            <pre>{
+  "code": 200,
+  "message": "success",
+  "data": {}
+}</pre>
         </div>
         
         <div class="api-section">
             <h3>7.2 失败响应</h3>
-            <pre>{\n  "code": 500,\n  "message": "错误信息",\n  "data": null\n}</pre>
+            <pre>{
+  "code": 500,
+  "message": "错误信息",
+  "data": null
+}</pre>
         </div>
         
         <!-- 状态码说明 -->

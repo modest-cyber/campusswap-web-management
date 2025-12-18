@@ -44,11 +44,11 @@ public class OrderController {
      */
     @GetMapping("/list")
     public Result<PageResult<OrderResponse>> listOrders(
-            @RequestParam(required = false, defaultValue = "buyer") String type,
+            @RequestParam(required = false, defaultValue = "buyer") String viewType,
             @RequestParam(required = false) Integer status,
             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        PageResult<OrderResponse> result = orderService.listOrders(type, status, pageNum, pageSize);
+        PageResult<OrderResponse> result = orderService.listOrders(viewType, status, pageNum, pageSize);
         return Result.success(result);
     }
 

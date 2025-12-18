@@ -71,14 +71,17 @@ import { useRouter } from 'vue-router'
 import ProductCard from '../components/ProductCard.vue'
 import { listProducts } from '../api/product'
 import type { Category, Product } from '../api/product'
+import kaixuejiBanner from '../img/开学季大促.png'
+import biyejiBanner from '../img/毕业季清仓狂欢.png'
+import newUserBanner from '../img/新用户专享.png'
 
 const router = useRouter()
 
 // 轮播图数据
 const carouselItems = ref([
-  { id: 1, image: 'https://via.placeholder.com/1200x300?text=促销活动1', title: '开学季大促销', description: '全场商品8折起' },
-  { id: 2, image: 'https://via.placeholder.com/1200x300?text=促销活动2', title: '毕业季清仓', description: '低价出售各类闲置物品' },
-  { id: 3, image: 'https://via.placeholder.com/1200x300?text=促销活动3', title: '新用户专享', description: '注册即送10元优惠券' }
+  { id: 1, image: kaixuejiBanner, title: '开学季大促销', description: '全场商品8折起' },
+  { id: 2, image: biyejiBanner, title: '毕业季清仓', description: '低价出售各类闲置物品' },
+  { id: 3, image: newUserBanner, title: '新用户专享', description: '注册即送10元优惠券' }
 ])
 
 // 分类数据

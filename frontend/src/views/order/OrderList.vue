@@ -10,7 +10,6 @@
         <el-radio-button label="buyer">买家订单</el-radio-button>
         <el-radio-button label="seller">卖家订单</el-radio-button>
       </el-radio-group>
-      <span style="margin-left: 20px; color: #999;">当前viewType: {{ viewType }}</span>
     </div>
     
     <!-- 筛选栏 -->
