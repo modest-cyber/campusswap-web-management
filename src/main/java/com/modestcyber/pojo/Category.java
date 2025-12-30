@@ -22,7 +22,5 @@ public class Category {
     private Integer sortOrder;
     private Integer status;
     private LocalDateTime createTime;
-    
-    // 辅助字段
     private List<Category> children;
 }

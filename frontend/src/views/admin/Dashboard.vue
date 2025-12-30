@@ -98,7 +98,13 @@ const stats = ref<DashboardStats>({
 
 const loadStats = async () => {
   try {
-    stats.value = await getDashboardStats()
+    const data: any = await getDashboardStats()
+    // 将 totalAmount 从字符串转为数字
+    stats.value.userCount = data.userCount || 0
+    stats.value.productCount = data.productCount || 0
+    stats.value.orderCount = data.orderCount || 0
+    stats.value.totalAmount = typeof data.totalAmount === 'string' ? parseFloat(data.totalAmount) : (data.totalAmount || 0)
+    stats.value.pendingReviewCount = data.pendingReviewCount || 0
   } catch (error) {
     ElMessage.error('加载统计数据失败')
   }

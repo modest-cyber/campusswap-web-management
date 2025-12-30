@@ -140,11 +140,11 @@ const priceRange = ref({ min: undefined, max: undefined })
 
 // 分类数据
 const categories = ref<Category[]>([
-  { id: 1, name: '数码产品' },
-  { id: 2, name: '图书音像' },
+  { id: 1, name: '电子产品' },
+  { id: 2, name: '图书教材' },
   { id: 3, name: '生活用品' },
-  { id: 4, name: '体育用品' },
-  { id: 5, name: '服饰鞋包' },
+  { id: 4, name: '服装配饰' },
+  { id: 5, name: '运动用品' },
   { id: 6, name: '其他' }
 ])
 

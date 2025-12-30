@@ -86,11 +86,11 @@ const carouselItems = ref([
 
 // 分类数据
 const categories = ref<Category[]>([
-  { id: 1, name: '数码产品' },
-  { id: 2, name: '图书音像' },
+  { id: 1, name: '电子产品' },
+  { id: 2, name: '图书教材' },
   { id: 3, name: '生活用品' },
-  { id: 4, name: '体育用品' },
-  { id: 5, name: '服饰鞋包' },
+  { id: 4, name: '服装配饰' },
+  { id: 5, name: '运动用品' },
   { id: 6, name: '其他' }
 ])
 
@@ -126,7 +126,7 @@ const loadProducts = async () => {
     // 获取最新商品（按创建时间排序，只显示在售状态）
     const latestRes = await listProducts({ 
       sortBy: 'create_time', 
-      pageSize: 4,
+      pageSize: 10,
       status: 1  // 只显示在售商品
     })
     latestProducts.value = latestRes.list || []
@@ -134,7 +134,7 @@ const loadProducts = async () => {
     // 获取热门商品（按浏览量排序）
     const hotRes = await listProducts({ 
       sortBy: 'view_count', 
-      pageSize: 4,
+      pageSize: 10,
       status: 1  // 只显示在售商品
     })
     hotProducts.value = hotRes.list || []
@@ -153,10 +153,11 @@ onMounted(() => {
 
 <style scoped>
 .home {
-  background-color: #fff;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  min-height: calc(100vh - 120px);
 }
 
 /* 轮播图样式 */
