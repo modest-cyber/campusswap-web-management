@@ -1,8 +1,0 @@
-127.0.0.1 - - [15/Dec/2025:11:15:39 +0800] "GET /depts HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-127.0.0.1 - - [15/Dec/2025:11:15:39 +0800] "GET /favicon.ico HTTP/1.1" 404 555 "http://localhost/depts" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-127.0.0.1 - - [15/Dec/2025:11:15:46 +0800] "GET / HTTP/1.1" 200 615 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-127.0.0.1 - - [15/Dec/2025:11:15:59 +0800] "GET /dept HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-127.0.0.1 - - [15/Dec/2025:11:16:08 +0800] "GET /depts HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-127.0.0.1 - - [15/Dec/2025:11:16:21 +0800] "GET /80 HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-127.0.0.1 - - [15/Dec/2025:11:16:24 +0800] "GET /80 HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-127.0.0.1 - - [15/Dec/2025:11:17:37 +0800] "GET /dept HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
